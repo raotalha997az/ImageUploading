@@ -16,8 +16,8 @@ class Picture extends Model
     protected $table = 'picture';
 
     protected $fillable = [
-
         'picture_name',
+        'path_name',
         'folder_id',
     ];
 }

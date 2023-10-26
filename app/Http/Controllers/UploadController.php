@@ -36,28 +36,64 @@ public function  index(){
 }
 
 
+// public function uploading(Request $request)
+//  {   
+//     // dd($request);
+//     $request->validate([
+//         'folder_name' => 'required',
+//         'uploads.*' => 'required|file', // Note the asterisk (*) to validate an array of files
+//     ]);
+
+//     $folderName = $request->input('folder_name');
+
+//     $folderPath = public_path("storage/$folderName");
+//     if (!File::exists($folderPath)) {
+//         File::makeDirectory($folderPath, 0777, true, true);
+//     }
+
+//     $uploadedFiles = $request->file('uploads');
+
+//     foreach ($uploadedFiles as $file) {
+//         $fileName = $file->getClientOriginalName();
+//         $file->move($folderPath, $fileName);
+//     }
+
+//     return redirect()->back()->with('success', 'Files uploaded successfully.');
+// }
+
 public function uploading(Request $request)
- {   
-    // dd($request);
+{
     $request->validate([
         'folder_name' => 'required',
         'uploads.*' => 'required|file', // Note the asterisk (*) to validate an array of files
     ]);
 
     $folderName = $request->input('folder_name');
-
+    $random = Str::random(15);
     $folderPath = public_path("storage/$folderName");
     if (!File::exists($folderPath)) {
         File::makeDirectory($folderPath, 0777, true, true);
     }
 
     $uploadedFiles = $request->file('uploads');
-
-    foreach ($uploadedFiles as $file) {
-        $fileName = $file->getClientOriginalName();
-        $file->move($folderPath, $fileName);
+        $folder = Folder::create([
+            'folder_name' => $folderName,     
+        ]);
+        $folderId = Folder::latest()->pluck('id')->first();
+        foreach ($uploadedFiles as $file) {
+            $fileName1 = $file->getClientOriginalName();
+            $fileName = $random.$fileName1;
+            $file->move($folderPath, $fileName);
+            $fileType = $file->getClientOriginalExtension();
+            // Get the current URL
+            $currentURL = url('/');
+            // return $folder->id;
+            Picture::create([
+            'picture_name' => $fileName,  
+            'path_name' => "$currentURL/storage/$folderName/$fileName",    
+            'folder_id' => $folderId,   
+        ]);
     }
-
     return redirect()->back()->with('success', 'Files uploaded successfully.');
 }
 

@@ -18,6 +18,5 @@ class Folder extends Model
     protected $fillable = [
 
         'folder_name',
-        'path_name',
     ];
 }
