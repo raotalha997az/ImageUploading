@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Storage;
+use Validator;
 use App\Models\Folder;
 use App\Models\Upload;
+use App\Models\Picture;
 use App\Models\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Picture;
 use Illuminate\Support\Facades\File;
 
 
@@ -63,10 +64,14 @@ public function  index(){
 
 public function uploading(Request $request)
 {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
         'folder_name' => 'required',
-        'uploads.*' => 'required|file', // Note the asterisk (*) to validate an array of files
+        'uploads.*' => 'required|file',
     ]);
+    // $request->validate([
+    //     'folder_name' => 'required',
+    //     'uploads.*' => 'required|file', // Note the asterisk (*) to validate an array of files
+    // ]);
 
     $folderName = $request->input('folder_name');
     $random = Str::random(15);
