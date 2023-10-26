@@ -88,12 +88,7 @@
     <div class="container1">
         <div class="folder-container mb-2 d-flex">
             <h1 class="text-center">Folders</h1>
-            <div class="folder col-auto d-flex">
-                <input type="text" placeholder=" Enter folder name" class="form-control" name="file_name" />
-                <button id="btn" class="btn" type="button">
-                    <a href="folder.html">create</a>
-                </button>
-            </div>
+           
             <div class="container">
                 <div class="row">
                     @foreach ($folders as $folder)
