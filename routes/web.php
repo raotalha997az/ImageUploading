@@ -24,3 +24,5 @@ Route::post('/forms', [UploadController::class, 'uploading'])->name('imguploadin
 Route::get('/folders', [UploadController::class, 'show'])->name('folders');
 Route::get('/folders/{id}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
 
+
+
