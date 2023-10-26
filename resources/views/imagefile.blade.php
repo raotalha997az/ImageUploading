@@ -85,11 +85,10 @@
         <div class="container1">
           <div class="folder-container mb-2 d-flex">
             <h1 class="text-center">Files</h1>
-            <a href="imagefile.html"
-              ><img src="image_icon_153794.png" alt=""
-            /></a>
-            <div>Img 1</div>
-          </div>
+            @foreach($images as $image)
+            <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}">
+            @endforeach
+              </div>
         </div>
       </body>
     </html>

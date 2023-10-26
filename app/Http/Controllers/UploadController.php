@@ -94,7 +94,28 @@ public function uploading(Request $request)
             'folder_id' => $folderId,   
         ]);
     }
-    return redirect()->back()->with('success', 'Files uploaded successfully.');
+    return redirect()->route('folders')->with('success', 'Files uploaded successfully.');
+}
+
+
+public function show(){
+    $folders = Folder::get();
+    return view('folder', compact('folders')); 
+}
+
+
+public function foldersimgshow($id){
+    // Retrieve the folder with the specified ID
+    $folder = Folder::find($id);
+
+    if(!$folder){
+        return abort(404); // Handle the case where folder with the given ID is not found
+    }
+
+    // Retrieve images associated with the folder
+    $images = Picture::where('folder_id', $id)->get();
+
+    return view('imagefile', compact('images'));
 }
 
 }
