@@ -90,6 +90,93 @@
             @endforeach
               </div>
         </div>
+
+
+
+{{-- html css --}}
+
+<div class="image-container">
+  <label>
+    <img src="image1.png" alt="Image 1" class="image" />
+    <input type="checkbox" class="checkbox" value="image_1" />
+  </label>
+</div>
+
+<div class="image-container">
+  <label>
+    <img src="image2.png" alt="Image 2" class="image" />
+    <input type="checkbox" class="checkbox" value="image_2" />
+  </label>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary movebtn"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+>
+  Move
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          <img src="image1.png" alt="" height="100px" width="100px" />
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll(".checkbox");
+  const selectedImages = [];
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", (event) => {
+      const value = event.target.value;
+      if (event.target.checked) {
+        selectedImages.push(value);
+      } else {
+        const index = selectedImages.indexOf(value);
+        if (index > -1) {
+          selectedImages.splice(index, 1);
+        }
+      }
+      console.log(selectedImages);
+    });
+  });
+
+  // html css end here
       </body>
     </html>
   </body>
