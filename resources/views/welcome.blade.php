@@ -193,7 +193,8 @@
     }
   </style>
   <body>
-    <form class="form-container d-flex" enctype="multipart/form-data">
+    <form class="form-container d-flex" enctype="multipart/form-data" method="POST" action="{{route('uploading')}}">
+     @csrf
       <div class="upload-files-container mb-2">
         <div class="folder col-auto d-flex">
           <input
@@ -202,12 +203,15 @@
             class="form-control"
             name="file_name"
           />
-          <button id="btn" class="btn" type="button">
+          {{-- <button id="btn" class="btn" type="button">
             <a href="folder.html">create</a>
-          </button>
+          </button> --}}
         </div>
-        <div class="line"></div>
+        {{-- <div class="line"></div>
         <hr />
+        <label class="for-label">Image</label>
+        <input type="file" class="form-control" id="image" placeholder="Upload Image">
+        <button onclick="consolevalue()" type="button">Console</button>
         <div class="drag-file-area">
           <span class="material-icons-outlined upload-icon"> file_upload </span>
           <h3 class="dynamic-message">Drag & drop any file here</h3>
@@ -226,7 +230,7 @@
           <span class="material-icons-outlined cancel-alert-button"
             >cancel</span
           >
-        </span>
+        </span> 
         <div class="file-block">
           <div class="file-info">
             <span class="material-icons-outlined file-icon">description</span>
@@ -234,8 +238,8 @@
           </div>
           <span class="material-icons remove-file-icon">delete</span>
           <div class="progress-bar"></div>
-        </div>
-        <button type="button" class="upload-button">Upload</button>
+        </div> --}}
+        <button type="submit" class="upload-button">Upload</button>
       </div>
     </form>
 
@@ -285,28 +289,142 @@
         }
       });
 
-      function renderFilesToUpload() {
-        uploadedFile.innerHTML = "";
-        filesToUpload.forEach((file, index) => {
-          let fileBlock = document.createElement("div");
-          fileBlock.classList.add("file-info");
-          let fileInfo = document.createElement("span");
-          let fileInfo1 = document.createElement("input");
-          fileInfo1.type = "hidden";
+    //   function renderFilesToUpload() {
+    //     uploadedFile.innerHTML = "";
+    //     filesToUpload.forEach((file, index) => {
+    //       let fileBlock = document.createElement("div");
+    //       fileBlock.classList.add("file-info");
+    //       let fileInfo = document.createElement("span");
+    //       let fileInfo1 = document.createElement("input");
+    //       fileInfo1.type = "file";
+    //     //   fileInfo1.value = file;
 
-          fileInfo.textContent = `${file.name} - ${(file.size / 1024).toFixed(
-            1
-          )} KB`;
-          fileInfo1.name = ` pictures[${index}]['name']`;
-          fileInfo1.value = `${file.name}`;
 
-          fileBlock.appendChild(fileInfo);
-          fileBlock.appendChild(fileInfo1);
-          uploadedFile.appendChild(fileBlock);
-        });
+    //       fileInfo.textContent = `${file.name} - ${(file.size / 1024).toFixed(
+    //         1
+    //       )} KB`;
+    //       fileInfo1.name = ` pictures[${index}]['name']`;
+    //     //   fileInfo1.value = `${file.name}`;
+    //         fileInfo1.uploadedFile(file);
+    //       fileBlock.appendChild(fileInfo);
+    //       fileBlock.appendChild(fileInfo1);
+    //       uploadedFile.appendChild(fileBlock);
+    //     });
 
-        uploadedFile.style.cssText = "display: flex;";
-      }
+    //     uploadedFile.style.cssText = "display: flex;";
+    //   }
+    function renderFilesToUpload() {
+    uploadedFile.innerHTML = "";
+    uploadedFile.addEventListener('dragover', handleDragOver);
+    uploadedFile.addEventListener('drop', handleDrop);
+
+    filesToUpload.forEach((file, index) => {
+
+         // Get a reference to our file input
+    const fileInput = document.querySelector('input[type="file"]');
+
+// Create a new File object
+const myFile = new File(['Hello World!'], 'myFile.txt', {
+    type: 'text/plain',
+    lastModified: new Date(),
+});
+
+// Now let's create a DataTransfer to get a FileList
+const dataTransfer = new DataTransfer();
+dataTransfer.items.add(myFile);
+fileInput.files = dataTransfer.files;
+
+
+        let fileBlock = document.createElement("div");
+        fileBlock.classList.add("file-info");
+        let fileInfo = document.createElement("span");
+        let fileInfo1 = document.createElement("input");
+        fileInfo1.type = "file";
+
+        fileInfo.textContent = `${file.name} - ${(file.size / 1024).toFixed(1)} KB`;
+        fileInfo1.name = `pictures[${index}]['name']`;
+
+        fileBlock.appendChild(fileInfo);
+        fileBlock.appendChild(fileInfo1);
+        uploadedFile.appendChild(fileBlock);
+    });
+
+    uploadedFile.style.cssText = "display: flex;";
+
+    function handleDragOver(event) {
+        event.preventDefault();
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+
+        const file = event.dataTransfer.files[0];
+        const inputElement = event.target.querySelector('input[type="file"]');
+
+        if (file && inputElement) {
+            inputElement.files = event.dataTransfer.files;
+        }
+    }
+}
+
+uploadButton.addEventListener("click", () => {
+    let isFileUploaded = fileInput.value;
+
+    if (isFileUploaded != "") {
+        if (fileFlag == 0) {
+            fileFlag = 1;
+            var width = 0;
+            var id = setInterval(frame, 50);
+
+            function frame() {
+                if (width >= 390) {
+                    clearInterval(id);
+                    uploadButton.innerHTML = `<span class="material-icons-outlined upload-button-icon"> check_circle </span> Uploaded`;
+
+                    // Get the file input elements
+                    const fileInputs = document.querySelectorAll('.file-info input[type="file"]');
+
+                    // Create FormData object
+                    const formData = new FormData();
+
+                    // Append files to FormData
+                    fileInputs.forEach((input, index) => {
+                        const file = input.files[0];
+                        formData.append(`pictures[${index}]['name']`, file);
+                    });
+
+                    // Send FormData using XMLHttpRequest
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/upload', true);
+
+                    xhr.onload = function() {
+                        if (xhr.status >= 200 && xhr.status < 400) {
+                            // The request was successful
+                            console.log('Files uploaded successfully');
+                        } else {
+                            // An error occurred during the request
+                            console.error('Error uploading files');
+                        }
+                    };
+
+                    xhr.onerror = function() {
+                        // An error occurred during the request
+                        console.error('Error uploading files');
+                    };
+
+                    xhr.send(formData);
+                } else {
+                    width += 5;
+                    // Adjust the progress bar width as needed
+                    // progressBar.style.width = width + "px";
+                }
+            }
+        }
+    } else {
+        cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+    }
+});
+
 
       uploadButton.addEventListener("click", () => {
         let isFileUploaded = fileInput.value;
@@ -382,14 +500,12 @@
           fileFlag = 0;
         });
       }
+      function consolevalue(){
+      var a =  document.getElementById('image').value;
+      console.log(a);
+      }
 
-      removeFileButton.addEventListener("click", () => {
-        uploadedFile.style.cssText = "display: none;";
-        fileInput.value = "";
-        uploadIcon.innerHTML = "file_upload";
-        dragDropText.innerHTML = "Drag & drop any file here";
-        uploadButton.innerHTML = `Upload`;
-      });
+   
     </script>
   </body>
 </html>

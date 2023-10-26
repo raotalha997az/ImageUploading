@@ -17,4 +17,7 @@ use App\Http\Controllers\UploadController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/upload', [UploadController::class, 'upload']);
+Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
+Route::get('/forms', [UploadController::class, 'index']);
+Route::post('/forms', [UploadController::class, 'uploading'])->name('imguploading');
+
