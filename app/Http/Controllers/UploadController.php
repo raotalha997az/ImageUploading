@@ -114,8 +114,10 @@ public function foldersimgshow($id){
 
     // Retrieve images associated with the folder
     $images = Picture::where('folder_id', $id)->get();
+    $folders = Folder::where('id', $id)->latest()->first();
+    $foldersall = Folder::get();
 
-    return view('imagefile', compact('images'));
+    return view('imagefile', compact('images','folders','foldersall'));
 }
 
 }
