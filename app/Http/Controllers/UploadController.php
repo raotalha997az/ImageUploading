@@ -110,19 +110,51 @@ public function show(){
 
 
 public function foldersimgshow($id){
-    // Retrieve the folder with the specified ID
     $folder = Folder::find($id);
 
     if(!$folder){
-        return abort(404); // Handle the case where folder with the given ID is not found
+        return abort(404);
     }
 
     // Retrieve images associated with the folder
     $images = Picture::where('folder_id', $id)->get();
     $folders = Folder::where('id', $id)->latest()->first();
-    $foldersall = Folder::get();
+    $foldersall = Folder::where('id','!=',$id)->get();
 
-    return view('imagefile', compact('images','folders','foldersall'));
+    return view('imagefile', compact('images','folders','foldersall','folder'));
+}
+
+public function Move(Request $request){
+    $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name');
+    // dd($request);
+    foreach($request->pictures as $picture){
+        Picture::where('id',$picture)->update([
+            'folder_id' => $request->folder_id
+        ]);
+
+        $picture_name = Picture::where('id', $picture)->pluck('picture_name');
+
+
+        $sourceFolder = "storage/{$request->old_folder}";
+        $targetFolder = "storage/{$new_folder}"; 
+    
+        // Check if the source folder exists
+        if (File::exists($sourceFolder)) {
+            // Get a list of all files in the source folder
+            $files = File::allFiles($sourceFolder);
+    
+            // Move each file to the target folder
+            foreach ($files as $file) {
+                $newFilePath = "{$targetFolder}/{$picture_name}";
+                $cleanFolderName = str_replace(['[', ']', '&quot;'], '',$new_folder);
+                File::move($file->getPathname(), $newFilePath);
+            }
+        } 
+        
+    }
+
+
+    return to_route('folders');
 }
 
 }
