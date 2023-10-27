@@ -173,4 +173,19 @@ if (!File::exists($folderPath)) {
     return to_route('folders');
 }
 
+// Delete iamge
+public function delete($id) {
+    $image = Picture::find($id);
+
+    if (!$image) {
+        return response()->json(['message' => 'Image not found'], 404);
+    }
+    Storage::delete($image->path_name);
+
+    $image->delete();
+    return response()->json(['message' => 'Image Deleted Successsfully!'], 404);
+
+    // return redirect()->back()->with('success', 'Image deleted successfully');
+}
+
 }

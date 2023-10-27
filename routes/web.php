@@ -28,4 +28,7 @@ Route::get('/folders/img', [UploadController::class, 'moveimgfolder'])->name('mo
 Route::Post('/folders/img', [UploadController::class, 'Move'])->name('picture.move');
 
 Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name('foldercreate');
+Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.image');
+
+
 
