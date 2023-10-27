@@ -122,24 +122,24 @@ h4 {
                         <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th scope="col">Day</th>
-                              <th scope="col">Article Name</th>
-                              <th scope="col">Author</th>
-                              <th scope="col">Shares</th>
+                              <th scope="col">Images</th>          
+                              <th scope="col">Select File</th>
+                              <th scope="col">Images Name</th>                             
                               <th scope="col">Actions</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                          
+                          {{-- {{dd($images)}} --}}
                               @foreach ($images as $image)
                                 <label class="m-5">
                                     <td>       <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}" class="image" />     </td>    
-                                    <td>        <input type="checkbox" class="checkbox" name="pictures[{{$loop->iteration}}]['pricture_id']" value="{{ $image->id }}" />     </td>    
+                                    <td>        <input type="checkbox" class="checkbox" name="pictures[{{$loop->iteration}}]['pricture_id']" value="{{ $image->id }}" /></td>    
+                                    <td>        <label   class="form-label" name="pictures" value="">{{ $image->picture_name}}</label></td>    
                                 </label>
-                                <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button></td>
-                                <td> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i></button></td>
-                                <td>    <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                                <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+                                 <button type="button" class="btn btn-success"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                                </td>
                             </tr>
                             @endforeach
