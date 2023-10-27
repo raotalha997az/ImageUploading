@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -86,24 +87,77 @@
             height: 110px;
             width: 110px;
         }
+        .container {
+  padding: 2rem 0rem;
+}
+
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}
     </style>
 
     <body>
+
+
+  
+
+
+
         <div class="container1">
           <form action="{{route('picture.move')}}" method="POST" >
             @csrf
             <div class="folder-container mb-2 d-flex">
                 <h1 class="text-center">{{ $folders->folder_name }}</h1>
+
+
+                <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th scope="col">Day</th>
+                              <th scope="col">Article Name</th>
+                              <th scope="col">Author</th>
+                              <th scope="col">Shares</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                          
+                              @foreach ($images as $image)
+                                <label class="m-5">
+                                    <td>       <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}" class="image" />     </td>    
+                                    <td>        <input type="checkbox" class="checkbox" name="pictures[{{$loop->iteration}}]['pricture_id']" value="{{ $image->id }}" />     </td>    
+                                </label>
+                                <td><button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button></td>
+                                <td> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i></button></td>
+                                <td>    <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                               </td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
                 <input type="hidden" name="old_folder" value="{{$folder->folder_name}}" >
                 {{-- {{dd($images)}} --}}
                 <div class="image-container" style="overflow: scroll">
-                      @foreach ($images as $image)
-                        <label class="m-5">
-                            <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}" class="image" />
-                            <input type="checkbox" class="checkbox" name="pictures[{{$loop->iteration}}]['pricture_id']" value="{{ $image->id }}" />
-                        </label>
-                        @endforeach
+                     
                     </div>
+
+
+
+
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary movebtn" data-bs-toggle="modal"
