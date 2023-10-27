@@ -193,7 +193,7 @@
     }
   </style>
   <body>
-    <form class="form-container d-flex" enctype="multipart/form-data" method="POST" action="{{route('uploading')}}">
+    {{-- <form class="form-container d-flex" enctype="multipart/form-data" method="POST" action="{{route('folders')}}">
      @csrf
       <div class="upload-files-container mb-2">
         <div class="folder col-auto d-flex">
@@ -202,11 +202,11 @@
             placeholder=" Enter folder name"
             class="form-control"
             name="file_name"
-          />
+          /> --}}
           {{-- <button id="btn" class="btn" type="button">
             <a href="folder.html">create</a>
           </button> --}}
-        </div>
+        {{-- </div> --}}
         {{-- <div class="line"></div>
         <hr />
         <label class="for-label">Image</label>
@@ -239,9 +239,9 @@
           <span class="material-icons remove-file-icon">delete</span>
           <div class="progress-bar"></div>
         </div> --}}
-        <button type="submit" class="upload-button">Upload</button>
-      </div>
-    </form>
+        <button type="submit" class="upload-button"><a href="{{route('folders')}}">Go To Folder</a> </button>
+      {{-- </div>
+    </form> --}}
 
     <script>
       var isAdvancedUpload = (function () {
