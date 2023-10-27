@@ -156,5 +156,21 @@ public function Move(Request $request){
 
     return to_route('folders');
 }
+public function Foldercreate(Request $request) {
+//   dd($request);  
+  $validator = Validator::make($request->all(), [
+    'folder_name' => 'required',
+]);
+
+$folderName = $request->input('folder_name');
+$folderPath = public_path("storage/$folderName");
+if (!File::exists($folderPath)) {
+    File::makeDirectory($folderPath, 0777, true, true);
+}
+    $folder = Folder::create([
+        'folder_name' => $folderName,     
+    ]);
+    return to_route('folders');
+}
 
 }

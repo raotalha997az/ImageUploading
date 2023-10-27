@@ -120,7 +120,8 @@
     <!-- Button trigger modal -->
 
   
-  <!-- Modal -->
+  <!-- Modal --> <form action="{{route('foldercreate')}}" method="POST">
+            @csrf
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -128,16 +129,18 @@
           <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+       
         <div class="modal-body">
             <input type="text" class="form-control" id="input_text" placeholder="Enter folder name" name="folder_name">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn mb-3" id="btn" > Create</button>
+          <button type="submit" class="btn mb-3" id="btn" > Create</button>
         </div>
+   
       </div>
     </div>
-  </div>
+  </div> </form>
 </body>
 
 </html>

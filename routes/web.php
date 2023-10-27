@@ -27,3 +27,5 @@ Route::get('/folders/{id}', [UploadController::class, 'foldersimgshow'])->name('
 Route::get('/folders/img', [UploadController::class, 'moveimgfolder'])->name('moveimgfolder');
 Route::Post('/folders/img', [UploadController::class, 'Move'])->name('picture.move');
 
+Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name('foldercreate');
+
