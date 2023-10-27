@@ -145,7 +145,7 @@
                                             @foreach ($images as $image)
                                                 <label class="m-5">
                                                     <input type="hidden"                                    
-                                                    value="{{ $image->id }}" id="del {{ $image->id }}"/></td>
+                                                    value="{{ $image->id }}" id="del{{ $image->id }}"/></td>
                                                     <td> <img src="{{ $image->path_name }}"
                                                             alt="{{ $image->picture_name }}" class="image" /> </td>
                                                     <td> <input type="checkbox" class="checkbox"
@@ -156,9 +156,14 @@
                                                 </label>
                                                 <td><button type="button" class="btn btn-primary"><i
                                                             class="fa fa-eye"></i></button>
-                                                    
-                                                       <a href="javascript:void(0)" class="btn btn-danger"> <i
-                                                            class="fa fa-trash"></i></a>
+                                                            {{-- <form id="delete_image_form" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <input type="hidden" name="picture_id" value="{{$image->id}}" >
+                                                                <button class="btn btn-danger" type="button" onclick="deleteImage({{$image->id}})">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </form> --}}
                                                 </td>
                                         </tr>
                                         @endforeach
@@ -173,11 +178,6 @@
                     <div class="image-container" style="overflow: scroll">
 
                     </div>
-
-
-
-
-
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary movebtn" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop"> Move </button>
@@ -220,6 +220,18 @@
         </div>
         </form>
         <script>
+            // for deleeting Images
+            // function deleteImage(id) {
+            //     console.log(id);
+            //     $('#delete_image_form').submit();
+            // }
+            function deleteImage(id) {
+    if (confirm("Do you want to delete this picture?")) {
+        $('#delete_image_form').attr('action', '/pictures/delete/' + id);
+        $('#delete_image_form').submit();
+    }
+}
+
             function folderId(id) {
                 console.log(id);
             }
@@ -244,25 +256,6 @@
                 });
             })
         </script>
-{{-- for deleeting Images--}}
-<script>
-function delete(id) {
-  if (confirm("Do you want to delete this pictures?")) 
-  {
-  $.ajax({
-    url:'/pictures/delete/' +id,
-    type:'DELETE',
-    data:{
-        _token : $("input[name=_token]").val()
-    },
-    success:function(response){
-
-    }
-  });  
-  }  
-}
-
-</script>
     </body>
 
     </html>

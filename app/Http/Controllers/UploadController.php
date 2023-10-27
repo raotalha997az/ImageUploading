@@ -174,7 +174,8 @@ if (!File::exists($folderPath)) {
 }
 
 // Delete iamge
-public function delete($id) {
+public function delete(Request $request) { 
+    $id = $request->input('picture_id');
     $image = Picture::find($id);
 
     if (!$image) {

@@ -24,11 +24,12 @@ Route::post('/forms', [UploadController::class, 'uploading'])->name('imguploadin
 Route::get('/folders', [UploadController::class, 'show'])->name('folders');
 Route::get('/folders/{id}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
 
-Route::get('/folders/img', [UploadController::class, 'moveimgfolder'])->name('moveimgfolder');
+// Route::get('/folders/img', [UploadController::class, 'moveimgfolder'])->name('moveimgfolder');
 Route::Post('/folders/img', [UploadController::class, 'Move'])->name('picture.move');
 
 Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name('foldercreate');
-Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.image');
+Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.picture');
+
 
 
 
