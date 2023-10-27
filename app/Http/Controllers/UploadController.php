@@ -124,38 +124,38 @@ public function foldersimgshow($id){
     return view('imagefile', compact('images','folders','foldersall','folder'));
 }
 
-public function Move(Request $request){
-    $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name');
-    // dd($request);
-    foreach($request->pictures as $picture){
-        Picture::where('id',$picture)->update([
-            'folder_id' => $request->folder_id
-        ]);
+// public function Move(Request $request){
+//     $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name');
+//     // dd($request);
+//     foreach($request->pictures as $picture){
+//         Picture::where('id',$picture)->update([
+//             'folder_id' => $request->folder_id
+//         ]);
 
-        $picture_name = Picture::where('id', $picture)->pluck('picture_name');
+//         $picture_name = Picture::where('id', $picture)->pluck('picture_name');
 
 
-        $sourceFolder = "storage/{$request->old_folder}";
-        $targetFolder = "storage/{$new_folder}"; 
+//         $sourceFolder = "storage/{$request->old_folder}";
+//         $targetFolder = "storage/{$new_folder}"; 
     
-        // Check if the source folder exists
-        if (File::exists($sourceFolder)) {
-            // Get a list of all files in the source folder
-            $files = File::allFiles($sourceFolder);
+//         // Check if the source folder exists
+//         if (File::exists($sourceFolder)) {
+//             // Get a list of all files in the source folder
+//             $files = File::allFiles($sourceFolder);
     
-            // Move each file to the target folder
-            foreach ($files as $file) {
-                $newFilePath = "{$targetFolder}/{$picture_name}";
-                $cleanFolderName = str_replace(['[', ']', '&quot;'], '',$new_folder);
-                File::move($file->getPathname(), $newFilePath);
-            }
-        } 
+//             // Move each file to the target folder
+//             foreach ($files as $file) {
+//                 $newFilePath = "{$targetFolder}/{$picture_name}";
+//                 $cleanFolderName = str_replace(['[', ']', '&quot;'], '',$new_folder);
+//                 File::move($file->getPathname(), $newFilePath);
+//             }
+//         } 
         
-    }
+//     }
 
 
-    return to_route('folders');
-}
+//     return to_route('folders');
+// }
 public function Foldercreate(Request $request) {
 //   dd($request);  
   $validator = Validator::make($request->all(), [
@@ -184,9 +184,49 @@ public function delete(Request $request) {
     Storage::delete($image->path_name);
 
     $image->delete();
-    return response()->json(['message' => 'Image Deleted Successsfully!'], 404);
+    // return response()->json(['message' => 'Image Deleted Successsfully!'], 404);
 
-    // return redirect()->back()->with('success', 'Image deleted successfully');
+
+    return redirect()->back()->with('success', 'Image deleted successfully');
+}
+public function insertImage(Request $request) {
+    $new_folder = Folder::where('id',$request->folder_name)->pluck('folder_name');
+    $validator = Validator::make($request->all(), [
+        'folder_name' => 'required',
+        'uploads.*' => 'required|file',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // $folderName = $request->input('folder_name');
+    $random = Str::random(15);
+    $folderPath = public_path("storage/$new_folder");
+
+    $currentURL = url('/');
+
+    $uploadedFiles = $request->file('uploads');
+    $folderId = $request->input('folder_id');
+
+    foreach ($uploadedFiles as $file) {
+        $fileName1 = $file->getClientOriginalName();
+        $fileName = $random . $fileName1;
+        $file->move($folderPath, $fileName);
+
+        $picture = new Picture();
+        $picture->picture_name = $fileName;
+        $picture->path_name = "$currentURL/storage/$new_folder/$fileName";
+        $picture->folder_id = $folderId;
+        $picture->save();
+    }
+
+    return redirect()->route('folders')->with('success', 'Files uploaded successfully.');
+}
+
+public function ShowImage($id) {
+    $img = Picture::where('id',$id)->pluck('path_name');
+    return view('imageShow', compact('img'));
 }
 
 }

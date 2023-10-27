@@ -110,79 +110,99 @@
             th {
                 vertical-align: middle;
             }
+
+            .container1 {
+                width: 100vw;
+                height: 100vh;
+                background-color: #08b4b4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     </style>
 
     <body>
-
-
-
-
-
-
         <div class="container1">
-            <form action="{{ route('picture.move') }}" method="POST">
+            <form action="{{route('insert.Image')}}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="folder-container mb-2 d-flex">
-                    <h1 class="text-center">{{ $folders->folder_name }}</h1>
-
-
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Images</th>
-                                            <th scope="col">Select File</th>
-                                            <th scope="col">Images Name</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            {{-- {{dd($images)}} --}}
-                                            @foreach ($images as $image)
-                                                <label class="m-5">
-                                                    <input type="hidden"                                    
-                                                    value="{{ $image->id }}" id="del{{ $image->id }}"/></td>
-                                                    <td> <img src="{{ $image->path_name }}"
-                                                            alt="{{ $image->picture_name }}" class="image" /> </td>
-                                                    <td> <input type="checkbox" class="checkbox"
-                                                            name="pictures[{{ $loop->iteration }}]['pricture_id']"
-                                                            value="{{ $image->id }}" /></td>
-                                                    <td> <label class="form-label" name="pictures"
-                                                            value="">{{ $image->picture_name }}</label></td>
-                                                </label>
-                                                <td><button type="button" class="btn btn-primary"><i
-                                                            class="fa fa-eye"></i></button>
-                                                            {{-- <form id="delete_image_form" method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <input type="hidden" name="picture_id" value="{{$image->id}}" >
-                                                                <button class="btn btn-danger" type="button" onclick="deleteImage({{$image->id}})">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form> --}}
-                                                </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                <div class="container2">
+                    <div class="folder-container1 mb-2 d-flex">
+                        <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
+                            style="width: 100%;">
+                            <h1 class="text-center col-auto" style="width: fit-content">{{ $folders->folder_name }}</h1>
+                            <span class="browse-files col-auto" style="margin-left: 40%;">
+                                <input type="file" class="form-control col-auto" id="default-file-input"
+                                    name="uploads[]" multiple>
+                                <input type="hidden" id="folder_id" value="{{ $folder->id }}" name="folder_id">
+                                <input type="hidden" id="folder_id" value="{{ $folder->folder_name }}" name="folder_name">
+                            </span>
+                            <button type="submit" id="btn" class="btn mb-3">Submit</button>
                         </div>
                     </div>
+            </form>
+            <div class="folder-container mb-2 d-flex">
+                @if (session()->has('success'))
+                    <h1>{{ session()->get('success') }}</h1>
+                @endif
 
-                    <input type="hidden" name="old_folder" value="{{ $folder->folder_name }}">
-                    {{-- {{dd($images)}} --}}
-                    <div class="image-container" style="overflow: scroll">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Images</th>
+                                        <th scope="col">Images Name</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {{-- {{dd($images)}} --}}
+                                        @foreach ($images as $image)
+                                            <label class="m-5">
+                                                <input type="hidden" value="{{ $image->id }}"
+                                                    id="del{{ $image->id }}" /></td>
+                                                <td> <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}"
+                                                        class="image" /> </td>
 
+                                                <td> <label class="form-label" name="pictures"
+                                                        value="">{{ $image->picture_name }}</label></td>
+                                            </label>
+                                            <td><button type="button" class="btn btn-primary" onclick="openImage('{{ $image->id }}')">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                            
+                                                <form id="delete_image_form" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="picture_id" value="{{ $image->id }}">
+                                                    <button class="btn btn-danger" type="button"
+                                                        onclick="deleteImage({{ $image->id }})">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary movebtn" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"> Move </button>
                 </div>
+
+                <input type="hidden" name="old_folder" value="{{ $folder->folder_name }}">
+                {{-- {{dd($images)}} --}}
+                <div class="image-container" style="overflow: scroll">
+
+                </div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary movebtn" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"> Move </button>
+            </div>
         </div>
+
 
 
 
@@ -199,6 +219,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body col-auto">
+
                         @foreach ($foldersall as $folder)
                             <div class="d-flex m-5">
                                 <input type="radio" class="form-check" value="{{ $folder->id }}" name="folder_id">
@@ -215,29 +236,51 @@
                         </button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
+
                 </div>
             </div>
         </div>
-        </form>
         <script>
             // for deleeting Images
             // function deleteImage(id) {
             //     console.log(id);
             //     $('#delete_image_form').submit();
             // }
-            function deleteImage(id) {
-    if (confirm("Do you want to delete this picture?")) {
-        $('#delete_image_form').attr('action', '/pictures/delete/' + id);
-        $('#delete_image_form').submit();
+            // moving folder form submit
+
+
+            //         document.addEventListener('DOMContentLoaded', function() {
+            //     const submitButton = document.getElementById('submitMove');
+
+            //     submitButton.addEventListener('click', function() {
+            //         document.getElementById('movefolder').submit();
+            //     });
+            // });
+// show image
+    function openImage(pictureId) {
+        // Assuming you have the route named 'show.Image'
+        var url = '{{ route("show.Image", ":id") }}';
+        url = url.replace(':id', pictureId);
+
+        // Open the image in a new window
+        window.open(url, '_blank');
     }
-}
+
+
+
+            function deleteImage(id) {
+                if (confirm("Do you want to delete this picture?")) {
+                    $('#delete_image_form').attr('action', '/pictures/delete/' + id);
+                    $('#delete_image_form').submit();
+                }
+            }
 
             function folderId(id) {
                 console.log(id);
             }
 
             // using deleete 
-            $(document).ready(function(){
+            $(document).ready(function() {
 
                 $('#deletebtn').click(function() {
                     var task_id = $(this).val();
@@ -249,7 +292,7 @@
                             // alert("Task Deleted Successfully");
                             alert(data.message);
                         },
-                        error: function(error){
+                        error: function(error) {
                             console.log(error.responseText);
                         }
                     });
