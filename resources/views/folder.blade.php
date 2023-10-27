@@ -82,13 +82,22 @@
         justify-content: center;
         text-align: center;
     }
+    header {
+        width: 100vw;
+        border: 2px solid rgba(255, 0, 0, 0.)
+    }
 </style>
 
 <body>
     <div class="container1">
         <div class="folder-container mb-2 d-flex">
-            <h1 class="text-center">Folders</h1>
-           
+            <div class="header d-flex">
+                <h1 class="text-center" >Folders</h1>
+                <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Create
+                  </button>
+            </div>
+            
             <div class="container">
                 <div class="row">
                     @foreach ($folders as $folder)
@@ -107,6 +116,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="text" class="form-control" id="input_text" placeholder="Enter folder name" name="folder_name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn mb-3" id="btn" > Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

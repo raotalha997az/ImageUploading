@@ -27,7 +27,6 @@
         :root {
             --blue: #08b4b4af;
         }
-
         @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
         body {
