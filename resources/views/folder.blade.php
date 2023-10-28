@@ -25,6 +25,25 @@
         box-sizing: border-box;
         font-family: "Montserrat", sans-serif;
     }
+    #scroller::-webkit-scrollbar {
+  width: 5px;
+
+}
+
+/* Track */
+#scroller::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+#scroller::-webkit-scrollbar-thumb {
+ background: transparent;
+}
+
+/* Handle on hover */
+#scroller::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
     #btn {
         margin-top: 15px;
@@ -90,9 +109,9 @@
 
 <body>
     <div class="container1">
-        <div class="folder-container mb-2 d-flex">
+        <div class="folder-container mb-2 d-flex" style="overflow:scroll;" id="scroller">
             <div class="header d-flex">
-                <h1 class="text-center" >Folders</h1>
+                <h1 class="text-center">Folders</h1>
                 <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     Create
                   </button>

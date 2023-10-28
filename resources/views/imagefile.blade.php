@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -194,7 +195,7 @@
                     <div class="folder-container1 mb-2 d-flex">
                         <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
                             style="width: 100%;">
-                            <h1 class="text-center col-auto" style="width: fit-content">{{ $folders->folder_name }}</h1>
+                           
                             <span class="browse-files col-auto" style="margin-left: 40%;">
                                 <input type="file" class="form-control col-auto" id="default-file-input"
                                     name="uploads[]" multiple>
@@ -202,20 +203,31 @@
                                 <input type="hidden" id="folder_id" value="{{ $folder->folder_name }}" name="folder_name">
                             </span>
                             <button type="submit" id="btn" class="btn mb-3">Submit</button>
+                            <button class="btn btn-primary col-auto m-2" onclick="ExportToExcel('xlsx')">Export to Excel</button>
                         </div>
                     </div>
             </form>
              <div class=""> {{--folder-container mb-2 d-flex --}}
                
+                 
 
-                <div id="scroller" style="overflow: scroll;height:68vh">
+                 <div id="scroller" style="overflow: scroll;height:68vh">
                     <div class="row">
                         <div class="col-12">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="tbl_exporttable_to_xls">
                                 <thead>
                                     <tr>
+                                        <th colspan="5">
+                                           <center> <h1 class="text-center col-14" style="width: fit-content">{{ $folders->folder_name }}</h1></center>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr>
+                                        <th>S No.</th>
                                         <th scope="col">Images</th>
                                         <th scope="col">Images Name</th>
+                                        <th scope="col">Images Path</th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
@@ -225,17 +237,20 @@
                                         @foreach ($images as $image)
                                             <label >
                                                 <input type="hidden" value="{{ $image->id }}"
-                                                    id="del{{ $image->id }}" /></td>
-                                                <td> <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}"
-                                                        class="image" /> </td>
+                                                    id="del{{ $image->id }}" />
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td> <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}"
+                                                            class="image" /> </td>
+                                                    <td>{{$image->path_name}}</td>
 
                                                 <td> <label class="form-label" name="pictures"
                                                         value="">{{ $image->picture_name }}</label></td>
                                             </label>
                                             <td class="d-flex justify-content-evenly" >
-                                                <button type="button" class="btn btn-primary" onclick="openImage('{{ $image->id }}')">
+
+                                               <a href="{{$image->path_name}}" target="_blank"> <button type="button" class="btn btn-primary">
                                                   <i class="fa fa-eye"></i>
-                                                </button>
+                                                </button></a>
                                                 <form id="delete_image_form" method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -357,6 +372,20 @@
                     });
                 });
             })
+            function ExportToExcel(type, fn, dl) {
+                var elt = document.getElementById('tbl_exporttable_to_xls');
+                var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+                var currentDate = new Date();
+                var day = currentDate.getDate().toString().padStart(2, '0');
+                var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                var year = currentDate.getFullYear();         
+                var formattedDate = day + '-' + month + '-' + year;
+                var fileName = 'Image-Report (' + formattedDate + ').xlsx';
+
+                return dl ?
+                    XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                    XLSX.writeFile(wb, fn || fileName);
+            }
         </script>
     </body>
 
