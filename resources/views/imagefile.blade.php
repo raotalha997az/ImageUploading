@@ -26,106 +26,170 @@
         </script>
     </head>
     <style>
-        :root {
-            --blue: #08b4b4af;
-        }
+      :root {
+          --blue: #08b4b4af;
+      }
 
-        @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Montserrat", sans-serif;
-        }
+      body {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Montserrat", sans-serif;
+      }
+      input[type="file"]{
 
-        .modal-header,
-        .modal,
-        .modal-content {
-            padding-left: 20px;
-            margin-left: 20px;
-        }
+  border: 2px dashed #08b4b4;
+  border-radius: 40px;
+  text-align: center;
+ 
 
-        #btn {
-            margin-top: 15px;
-            margin-left: 20px;
-            width: 100px;
-            height: 40px;
-            background-color: #08b4b4;
-        }
+}
+      .row{
+    
+      }
+      .modal-header,
+      .modal,
+      .modal-content {
+          padding-left: 20px;
+          margin-left: 20px;
+      }
 
-        input[type="text"] {
-            width: 300px;
-            border: none;
-            border-bottom: 2px solid #08b4b4af;
-            border-radius: 4px;
-            padding: 10px;
-            margin: 10px;
-            outline: none;
-        }
+      #btn {
+          margin-top: 15px;
+          margin-left: 20px;
+          width: 250px;
+          height: 40px;
+          border-radius: 6px;
+          background-color: #08b4b4;
+          padding-left: 50px;
+          padding-right: 50px;
+      }
+      #movebtn{
+       background: white;
+       margin-left: 40%; 
+       margin-right: 40%;
+       width: 30% ;
+      }
+      input[type="text"] {
+          width: 300px;
+          border: none;
+          border-bottom: 2px solid #08b4b4af;
+          border-radius: 4px;
+          padding: 10px;
+          margin: 10px;
+          outline: none;
+      }
 
-        .container1 {
-            width: 100vw;
-            height: 100vh;
-            background-color: #08b4b4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+      .container1 {
+          width: 100vw;
+          height: 100vh;
+          background-color: #08b4b4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+      .container3{
+        width: 80vw;
+        height: 80vh;
+     
+        background: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px,
+              rgba(187, 179, 179, 0.28) 0px 6px 6px;
+      }
 
-        .folder-container {
-            width: 80vw;
-            height: 80vh;
-            background-color: #ffffff;
+#scroller::-webkit-scrollbar {
+  width: 5px;
 
-            padding: 30px 60px;
-            border-radius: 40px;
-            display: flex;
+}
 
-            flex-direction: column;
-            box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px,
-                rgba(0, 0, 0, 0.28) 0px 6px 6px;
-        }
+/* Track */
+#scroller::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
 
-        .form-check {
-            margin-right: 20px;
-        }
+/* Handle */
+#scroller::-webkit-scrollbar-thumb {
+ background: transparent;
+}
 
-        img {
-            height: 110px;
-            width: 110px;
-        }
+/* Handle on hover */
+#scroller::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
-        .container {
-            padding: 2rem 0rem;
-        }
+      .folder-container {
+        padding-top: 10%;
+          width: 80vw;
+          height: 80vh;
+     
+       
+      }
+      .folder-container1 {
+      
+        width: 80vw;
+        height: 10vh;
+        
+      }
+      .container2{
+          border-radius: 40px;
+          display: flex;
+          flex-direction: column;
+        background: #ffffff;
+        padding-right: 100px;
+    
+      }
+      .form-check {
+          margin-right: 20px;
+      }
 
-        h4 {
-            margin: 2rem 0rem 1rem;
-        }
+      img {
+          height: 110px;
+          width: 110px;
+      }
+      .drag-file-area label .browse-files-text {
+  color: #08b4b4;
+  font-weight: bolder;
+  cursor: pointer;
+}
+.browse-files span {
+  position: relative;
+  top: -25px;
+}
 
-        .table-image {
+      .container {
+          padding: 2rem 0rem;
+      }
 
-            td,
-            th {
-                vertical-align: middle;
-            }
+      h4 {
+          margin: 2rem 0rem 1rem;
+      }
 
-            .container1 {
-                width: 100vw;
-                height: 100vh;
-                background-color: #08b4b4;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-        }
-    </style>
+      .table-image {
+
+          td,
+          th {
+              vertical-align: middle;
+          }
+      }
+  </style>
 
     <body>
         <div class="container1">
+       
+          <div class="container3">
+            @if (session()->has('success'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session()->get('success') }}
+
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          
+            @endif
             <form action="{{route('insert.Image')}}" method="POST" enctype="multipart/form-data">
                 @csrf
+              
                 <div class="container2">
                     <div class="folder-container1 mb-2 d-flex">
                         <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
@@ -141,12 +205,10 @@
                         </div>
                     </div>
             </form>
-            <div class="folder-container mb-2 d-flex">
-                @if (session()->has('success'))
-                    <h1>{{ session()->get('success') }}</h1>
-                @endif
+             <div class=""> {{--folder-container mb-2 d-flex --}}
+               
 
-                <div class="container">
+                <div id="scroller" style="overflow: scroll;height:68vh">
                     <div class="row">
                         <div class="col-12">
                             <table class="table table-bordered">
@@ -161,7 +223,7 @@
                                     <tr>
                                         {{-- {{dd($images)}} --}}
                                         @foreach ($images as $image)
-                                            <label class="m-5">
+                                            <label >
                                                 <input type="hidden" value="{{ $image->id }}"
                                                     id="del{{ $image->id }}" /></td>
                                                 <td> <img src="{{ $image->path_name }}" alt="{{ $image->picture_name }}"
@@ -170,10 +232,10 @@
                                                 <td> <label class="form-label" name="pictures"
                                                         value="">{{ $image->picture_name }}</label></td>
                                             </label>
-                                            <td><button type="button" class="btn btn-primary" onclick="openImage('{{ $image->id }}')">
-                                                <i class="fa fa-eye"></i>
-                                            </button>
-                                            
+                                            <td class="d-flex justify-content-evenly" >
+                                                <button type="button" class="btn btn-primary" onclick="openImage('{{ $image->id }}')">
+                                                  <i class="fa fa-eye"></i>
+                                                </button>
                                                 <form id="delete_image_form" method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -194,20 +256,18 @@
 
                 <input type="hidden" name="old_folder" value="{{ $folder->folder_name }}">
                 {{-- {{dd($images)}} --}}
-                <div class="image-container" style="overflow: scroll">
+                <div class="image-container" >
 
                 </div>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary movebtn" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"> Move </button>
+              
             </div>
+          </div>
+        </div>
+        
         </div>
 
-
-
-
         {{-- html css --}}
-
 
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -219,7 +279,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body col-auto">
-
                         @foreach ($foldersall as $folder)
                             <div class="d-flex m-5">
                                 <input type="radio" class="form-check" value="{{ $folder->id }}" name="folder_id">
