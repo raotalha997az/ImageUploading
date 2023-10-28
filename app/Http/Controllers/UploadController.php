@@ -190,19 +190,19 @@ public function delete(Request $request) {
     return redirect()->back()->with('success', 'Image deleted successfully');
 }
 public function insertImage(Request $request) {
-    $new_folder = Folder::where('id',$request->folder_name)->pluck('folder_name');
+    $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name')->first();
     $validator = Validator::make($request->all(), [
         'folder_name' => 'required',
         'uploads.*' => 'required|file',
     ]);
 
-    if ($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput();
-    }
-
     // $folderName = $request->input('folder_name');
-    $random = Str::random(15);
+    // $random = Str::random(15);
     $folderPath = public_path("storage/$new_folder");
+
+    if (!File::isDirectory($folderPath)) {
+        File::makeDirectory($folderPath, 0777, true, true);
+    }
 
     $currentURL = url('/');
 
@@ -211,7 +211,7 @@ public function insertImage(Request $request) {
 
     foreach ($uploadedFiles as $file) {
         $fileName1 = $file->getClientOriginalName();
-        $fileName = $random . $fileName1;
+        $fileName =  $fileName1;
         $file->move($folderPath, $fileName);
 
         $picture = new Picture();
@@ -221,12 +221,13 @@ public function insertImage(Request $request) {
         $picture->save();
     }
 
-    return redirect()->route('folders')->with('success', 'Files uploaded successfully.');
+    return redirect()->back()->with('success', 'Files uploaded successfully.');
 }
 
-public function ShowImage($id) {
-    $img = Picture::where('id',$id)->pluck('path_name');
-    return view('imageShow', compact('img'));
-}
+
+// public function ShowImage($id) {
+//     $img = Picture::where('id',$id)->pluck('path_name');
+//     return view('imageShow', compact('img'));
+// }
 
 }
