@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/folders', function () {
     return view('folders');
-})->middleware(['auth', 'verified'])->name('folders');
+})->middleware(['auth', 'verified'])->name('folders ');
 
 Route::middleware('auth')->group(function () {
     // Alltemplates middleware start

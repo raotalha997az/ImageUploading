@@ -54,7 +54,7 @@
                 width: 250px;
                 height: 40px;
                 border-radius: 6px;
-                background-color: #08b4b4;
+                background-color: #f1f1f1;
                 padding-left: 50px;
                 padding-right: 50px;
             }
@@ -69,7 +69,7 @@
             input[type="text"] {
                 width: 300px;
                 border: none;
-                border-bottom: 2px solid #08b4b4af;
+                border-bottom: 2px solid black;
                 border-radius: 4px;
                 padding: 10px;
                 margin: 10px;
@@ -79,7 +79,7 @@
             .container1 {
                 width: 100vw;
                 height: 100vh;
-                background-color: #08b4b4;
+                background-color:black;
                 display: flex;
                 justify-content: center;
                 align-items: center;

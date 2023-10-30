@@ -39,13 +39,13 @@
             margin-left: 20px;
             width: 100px;
             height: 40px;
-            background-color: #08b4b4;
+            background-color: white;
         }
 
         input[type="text"] {
             width: 300px;
             border: none;
-            border-bottom: 2px solid #08b4b4af;
+            border-bottom: 2px solid black;
             border-radius: 4px;
             padding: 10px;
             margin: 10px;
@@ -55,7 +55,7 @@
         .container1 {
             width: 100vw;
             height: 100vh;
-            background-color: #08b4b4;
+            background-color: black;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -106,16 +106,20 @@
                         data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         Create
                     </button>
+
+
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-
                         <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
                                             this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            <button type="button" style="width: 90px;" class="btn text-dark"
+                                id="btn">{{ __('Log Out') }}</button>
                         </x-dropdown-link>
                     </form>
+
+
 
 
                 </div>
