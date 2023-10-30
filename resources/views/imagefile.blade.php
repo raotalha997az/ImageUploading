@@ -79,7 +79,7 @@
             .container1 {
                 width: 100vw;
                 height: 100vh;
-                background-color:black;
+                background-color: black;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -194,16 +194,16 @@
                                 <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
                                     style="width: 100%;">
 
-                                    <span class="browse-files col-auto" style="margin-left: 40%;">
+                                    <span class="browse-files col-auto" style="margin-left: 30%;">
                                         <input type="file" class="form-control col-auto" id="default-file-input"
                                             name="uploads[]" multiple>
                                         <input type="hidden" id="folder_id" value="{{ $folder->id }}" name="folder_id">
                                         <input type="hidden" id="folder_id" value="{{ $folder->folder_name }}"
                                             name="folder_name">
                                     </span>
-                                    <button type="submit" id="btn" class="btn mb-3">Submit</button>
-                                    <button class="btn btn-primary col-auto m-2" onclick="ExportToExcel('xlsx')">Export to
-                                        Excel</button>
+                                    <button type="submit" id="btn" class="btn mb-3 btn-md">Submit</button>
+                                    <button class="btn btn-primary col-auto m-2 sm btn-md" onclick="ExportToExcel('xlsx')">Export to Excel</button>
+                                    
                                 </div>
                             </div>
                     </form>
