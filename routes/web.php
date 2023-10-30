@@ -19,9 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/folders', function () {
+    return view('folders');
+})->middleware(['auth', 'verified'])->name('folders');
 
 Route::middleware('auth')->group(function () {
     // Alltemplates middleware start
