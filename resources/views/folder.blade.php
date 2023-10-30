@@ -39,7 +39,7 @@
             margin-left: 20px;
             width: 100px;
             height: 40px;
-            background-color: white;
+            background-color: #f1f1f1;
         }
 
         input[type="text"] {
