@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,22 +18,33 @@ use App\Http\Controllers\UploadController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
-Route::get('/forms', [UploadController::class, 'index']);
-Route::post('/forms', [UploadController::class, 'uploading'])->name('imguploading');
 
-Route::get('/folders', [UploadController::class, 'show'])->name('folders');
-Route::get('/folders/{id}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    // Alltemplates middleware start
+    Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name('foldercreate');
+    Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.picture');
+    Route::Post('/pictures/addimage', [UploadController::class, 'insertImage'])->name('insert.Image');
+    Route::GET('/pictures/show/{id}', [UploadController::class, 'ShowImage'])->name('show.Image');
+    Route::get('/folders', [UploadController::class, 'show'])->name('folders');
+    Route::get('/folders/{id}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
+    Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
+ // Alltemplates middleware end
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+// Route::get('/forms', [UploadController::class, 'index']);
+// Route::post('/forms', [UploadController::class, 'uploading'])->name('imguploading');
 
 // Route::get('/folders/img', [UploadController::class, 'moveimgfolder'])->name('moveimgfolder');
 // Route::Post('/folders/img', [UploadController::class, 'Move'])->name('picture.move');
 
-Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name('foldercreate');
-Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.picture');
-Route::Post('/pictures/addimage', [UploadController::class, 'insertImage'])->name('insert.Image');
-
-// Route::GET('/pictures/show/{id}', [UploadController::class, 'ShowImage'])->name('show.Image');
 
 
-
-
+require __DIR__ . '/auth.php';
