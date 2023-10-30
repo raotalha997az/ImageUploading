@@ -190,14 +190,18 @@ public function delete(Request $request) {
     return redirect()->back()->with('success', 'Image deleted successfully');
 }
 public function insertImage(Request $request) {
-    $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name')->first();
+    $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+
+    // Validate the request
     $validator = Validator::make($request->all(), [
         'folder_name' => 'required',
         'uploads.*' => 'required|file',
     ]);
 
-    // $folderName = $request->input('folder_name');
-    // $random = Str::random(15);
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator);
+    }
+
     $folderPath = public_path("storage/$new_folder");
 
     if (!File::isDirectory($folderPath)) {
@@ -207,22 +211,26 @@ public function insertImage(Request $request) {
     $currentURL = url('/');
 
     $uploadedFiles = $request->file('uploads');
-    $folderId = $request->input('folder_id');
 
-    foreach ($uploadedFiles as $file) {
-        $fileName1 = $file->getClientOriginalName();
-        $fileName =  $fileName1;
-        $file->move($folderPath, $fileName);
+    if ($uploadedFiles) {
+        $folderId = $request->input('folder_id');
 
-        $picture = new Picture();
-        $picture->picture_name = $fileName;
-        $picture->path_name = "$currentURL/storage/$new_folder/$fileName";
-        $picture->folder_id = $folderId;
-        $picture->save();
+        foreach ($uploadedFiles as $file) {
+            $fileName1 = $file->getClientOriginalName();
+            $fileName =  $fileName1;
+            $file->move($folderPath, $fileName);
+
+            $picture = new Picture();
+            $picture->picture_name = $fileName;
+            $picture->path_name = "$currentURL/storage/$new_folder/$fileName";
+            $picture->folder_id = $folderId;
+            $picture->save();
+        }
     }
 
     return redirect()->back()->with('success', 'Files uploaded successfully.');
 }
+
 
 
 // public function ShowImage($id) {
