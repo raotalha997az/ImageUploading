@@ -31,7 +31,7 @@ Route::Post('/folders/create', [UploadController::class, 'Foldercreate'])->name(
 Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.picture');
 Route::Post('/pictures/addimage', [UploadController::class, 'insertImage'])->name('insert.Image');
 
-Route::GET('/pictures/show/{id}', [UploadController::class, 'ShowImage'])->name('show.Image');
+// Route::GET('/pictures/show/{id}', [UploadController::class, 'ShowImage'])->name('show.Image');
 
 
 
