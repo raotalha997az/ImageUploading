@@ -176,6 +176,7 @@ if (!File::exists($folderPath)) {
 // Delete iamge
 public function delete(Request $request) { 
     $id = $request->input('picture_id');
+// dd( $id);
     $image = Picture::find($id);
 
     if (!$image) {
@@ -189,6 +190,7 @@ public function delete(Request $request) {
 
     return redirect()->back()->with('success', 'Image deleted successfully');
 }
+
 public function insertImage(Request $request) {
     $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
 
@@ -237,5 +239,14 @@ public function insertImage(Request $request) {
 //     $img = Picture::where('id',$id)->pluck('path_name');
 //     return view('imageShow', compact('img'));
 // }
+
+public function foldersdestroy(Request $request) {
+   
+     Folder::where('id',$request->folder_id)->delete();
+    // Delete folder logic here
+    return redirect()->back()->with('success', 'Folders Deleted successfully.');
+}
+
+
 
 }

@@ -140,14 +140,45 @@
                                     {{ $folder->folder_name }}
                                 </a>
                             </p>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="destroyfol('{{ $folder->id }}')">
+                                <i class="fa fa-trash"></i> 
+                            </button>
+                            
                             
                             </div>
                         @endforeach
+                        
                     </div>
                 </div>
             </div>
         </div>
 
+{{-- modals delete --}}
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Folder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>are you sure to delet this folder</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <form id="destroyfol" class="delete-image-form" method="POST" action="{{route('folderdestroy')}}">
+            @csrf
+          
+            <input type="hidden" name="folder_id" id="folder_id_delete">
+           
+            <button type="submit" class="btn btn-primary">Yes</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
         <!-- Button trigger modal -->
 
 
@@ -176,6 +207,30 @@
                 </div>
             </div>
         </form>
+        <script>
+            function destroyfol(id) {
+    console.log(id);
+    $('#folder_id_delete').val(id);
+    // if (confirm("Do you want to delete this folder?")) {
+    //     // Use Ajax to submit the form
+    //     $.ajax({
+    //         url: '/folders/' + id + '/delete',
+    //         type: 'DELETE',
+    //         data: {
+    //             _token: '{{ csrf_token() }}',
+    //             folder_id: id
+    //         },
+    //         success: function(data) {
+    //             alert("Folder Deleted Successfully");
+    //             // Optionally, you can redirect or perform other actions here
+    //         },
+    //         error: function(error) {
+    //             console.log(error.responseText);
+    //         }
+    //     });
+    // }
+}
+        </script>
     </body>
 @endsection
 

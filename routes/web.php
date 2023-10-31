@@ -29,8 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/pictures/delete/{id}', [UploadController::class, 'delete'])->name('delete.picture');
     Route::Post('/pictures/addimage', [UploadController::class, 'insertImage'])->name('insert.Image');
     // Route::GET('/pictures/show/{id}', [UploadController::class, 'ShowImage'])->name('show.Image');
-    Route::get('/folders', [UploadController::class, 'show'])->name('folders');
+    Route::get('/folders', [UploadController::class, 'show'])->name('folders.show');
     Route::get('/folders/{id}/{folder_name}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
+    Route::post('/folders/delete', [UploadController::class, 'foldersdestroy'])->name('folderdestroy');
+
 
     Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
  // Alltemplates middleware end

@@ -8,10 +8,12 @@
         <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="csrf-token" content="{{ csrf_token() }}">
             <title>Document</title>
             <link rel="stylesheet" href="index.css" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+                crossorigin="anonymous" />
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
             </script>
@@ -190,6 +192,12 @@
                         @csrf
 
                         <div class="container2">
+                            <div class="row">
+                             
+                                <div class="col-lg-6">
+                                    <a href="{{route('folders.show')}}" class="btn-sm m-2  btn btn-primary">Back</a>
+                                </div>
+                            </div>
                             <div class="folder-container1 mb-2 d-flex">
                                 <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
                                     style="width: 100%;">
@@ -202,8 +210,9 @@
                                             name="folder_name">
                                     </span>
                                     <button type="submit" id="btn" class="btn mb-3 btn-md">Submit</button>
-                                    <button class="btn btn-primary col-auto m-2 sm btn-md" onclick="ExportToExcel('xlsx')">Export to Excel</button>
-                                    
+                                    <button class="btn btn-primary col-auto m-2 sm btn-md"
+                                        onclick="ExportToExcel('xlsx')">Export to Excel</button>
+
                                 </div>
                             </div>
                     </form>
@@ -255,16 +264,15 @@
                                                                 type="button" class="btn btn-primary">
                                                                 <i class="fa fa-eye"></i>
                                                             </button></a>
-                                                        <form id="delete_image_form" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
+                                                            <form class="delete-image-form" method="POST" action="{{ route('delete.picture', ['id' => $image->id]) }}">
+                                                                @csrf
+                                                                @method('DELETE')
+ 
                                                             <input type="hidden" name="picture_id"
-                                                                value="{{ $image->id }}">
-                                                            <button class="btn btn-danger" type="button"
-                                                                onclick="deleteImage({{ $image->id }})">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </form>
+                                                                value="{{ $image->id }}">                                                               <button class="btn btn-danger delete-image-btn" type="submit">
+                                                                    <i class="fa fa-trash"></i> 
+                                                                </button>
+                                                            </form>
                                                     </td>
                                             </tr>
                                             @endforeach
@@ -329,6 +337,41 @@
                 // }
                 // moving folder form submit
 
+                
+                // for deleeting Images
+//                 function destroyfol(id) {
+//     console.log(id);
+//     if (confirm("Do you want to delete this folder?")) {
+//         // Change the action attribute dynamically
+//         $('#destroyfol').attr('action', '/folders/' + id + '/delete');
+//         // Submit the form
+//         $('#destroyfol').submit();
+//     }
+// }
+function destroyfol(id) {
+    console.log(id);
+    if (confirm("Do you want to delete this folder?")) {
+        // Use Ajax to submit the form
+        $.ajax({
+            url: '/folders/' + id + '/delete',
+            type: 'DELETE',
+            data: {
+                _token: '{{ csrf_token() }}',
+                folder_id: id
+            },
+            success: function(data) {
+                alert("Folder Deleted Successfully");
+                // Optionally, you can redirect or perform other actions here
+            },
+            error: function(error) {
+                console.log(error.responseText);
+            }
+        });
+    }
+}
+
+
+
 
                 //         document.addEventListener('DOMContentLoaded', function() {
                 //     const submitButton = document.getElementById('submitMove');
@@ -344,37 +387,36 @@
                 // }
 
 
-
-                function deleteImage(id) {
-                    if (confirm("Do you want to delete this picture?")) {
-                        $('#delete_image_form').attr('action', '/pictures/delete/' + id);
-                        $('#delete_image_form').submit();
-                    }
-                }
+                // using dleete submit form
+                // function deleteImage(id) {
+                //     if (confirm("Do you want to delete this picture?")) {
+                //         $('#delete_image_form').attr('action', '/pictures/delete/' + id);
+                //         $('#delete_image_form').submit();
+                //     }
+                // }
 
                 function folderId(id) {
                     console.log(id);
                 }
 
                 // using deleete 
-                $(document).ready(function() {
+                // $(document).ready(function() {
 
-                    $('#deletebtn').click(function() {
-                        var task_id = $(this).val();
-                        // console.log("Btn CLICKED " + task_id);
-                        $.ajax({
-                            url: '/images/delete/' + task_id,
-                            method: 'POST',
-                            success: function(data) {
-                                // alert("Task Deleted Successfully");
-                                alert(data.message);
-                            },
-                            error: function(error) {
-                                console.log(error.responseText);
-                            }
-                        });
-                    });
-                })
+                //     $.ajax({
+                //     url: '{{ route('delete.picture', ['id' => 'task_id']) }}',  
+                //     method: 'POST',
+                //     data: {
+                //         "_token": "{{ csrf_token() }}"
+                //     },
+                //     success: function(data) {
+                //         alert(data.message);
+                //     },
+                //     error: function(error) {
+                //         console.log(error.responseText);
+                //     }
+                //     });
+                //     });
+
 
                 function ExportToExcel(type, fn, dl) {
                     var elt = document.getElementById('tbl_exporttable_to_xls');
