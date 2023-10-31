@@ -180,7 +180,7 @@ class UploadController extends Controller
 
     // Delete iamge
     public function delete(Request $request)
-    {
+    {   
         $id = $request->input('picture_id');
         // dd( $id);
         $image = Picture::find($id);
@@ -189,12 +189,16 @@ class UploadController extends Controller
             return response()->json(['message' => 'Image not found'], 404);
         }
         Storage::delete($image->path_name);
-
         $image->delete();
         // return response()->json(['message' => 'Image Deleted Successsfully!'], 404);
-
-
         return redirect()->back()->with('success', 'Image deleted successfully');
+        // try {
+        //     Storage::delete($image->path_name);
+        //     $image->delete();
+        //     return redirect()->back()->with('success', 'Image deleted successfully');
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with('error', 'An error occurred while deleting the image');
+        // }
     }
 
     public function insertImage(Request $request)

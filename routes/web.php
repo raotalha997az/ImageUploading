@@ -16,12 +16,12 @@ use App\Http\Controllers\ProfileController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/folders', function () {
     return view('folders');
-})->middleware(['auth', 'verified'])->name('folders ');
+})->middleware(['auth', 'verified'])->name('folders');
 
 Route::middleware('auth')->group(function () {
     // Alltemplates middleware start
