@@ -18,6 +18,10 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', function () {
     return view('auth.login');
 });
+Route::get('/optimize', function () {
+    \Artisan::call('optimize');
+    return 'Optimization completed.';
+});
 
 Route::get('/folders', function () {
     return view('folders');
