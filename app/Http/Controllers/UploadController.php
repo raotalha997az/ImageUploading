@@ -257,17 +257,41 @@ class UploadController extends Controller
 
     // Delete Directory and folder in db
 
+    // public function foldersdestroy(Request $request)
+    // {
+       
+    //     $folder = Folder::find($request->folder_id);
+    //     dd($folder);
+    //     if ($folder) {
+    //         $folder->delete();
+    //         File::deleteDirectory('storage/' . $folder->folder_name); 
+    //     }
+
+    //     return redirect()->back()->with('success', 'Folder deleted successfully.');
+    // }
     public function foldersdestroy(Request $request)
-    {
-        $folder = Folder::find($request->folder_id);
-        if ($folder) {
-            // Delete folder from database
-            $folder->delete();
+{
+    $folderId = $request->input('folder_id');
+    $folder = Folder::find($folderId);
 
-            // Delete folder and its contents from storage
-            File::deleteDirectory('storage/' . $folder->folder_name); // Adjust the path accordingly
-        }
-
-        return redirect()->back()->with('success', 'Folder deleted successfully.');
+    if (!$folder) {
+        return redirect()->back()->with('error', 'Folder not found');
     }
+
+    $folderName = $folder->folder_name;
+    $folderPath = public_path("storage/$folderName");
+
+    // Delete the folder from the database
+    $folder->delete();
+
+    // Check if the folder actually exists in storage and delete it
+    if (File::exists($folderPath)) {
+        File::deleteDirectory($folderPath);
+    } else {
+        return redirect()->back()->with('error', 'Folder not found in storage');
+    }
+
+    return redirect()->back()->with('success', 'Folder deleted successfully');
+}
+
 }

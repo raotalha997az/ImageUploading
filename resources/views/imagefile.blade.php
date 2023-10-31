@@ -197,6 +197,7 @@
                                 <div class="col-lg-6">
                                     <a href="{{route('folders.show')}}" class="btn-sm m-2  btn btn-primary">Back</a>
                                 </div>
+                                
                             </div>
                             <div class="folder-container1 mb-2 d-flex">
                                 <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
