@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Storage;
+// use Storage;
 use Validator;
 use App\Models\Folder;
 use App\Models\Upload;
@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class UploadController extends Controller
@@ -63,6 +65,9 @@ class UploadController extends Controller
 
     //     return redirect()->back()->with('success', 'Files uploaded successfully.');
     // }
+
+
+
 
     public function uploading(Request $request)
     {
@@ -167,7 +172,7 @@ class UploadController extends Controller
             'folder_name' => 'required',
         ]);
 
-        $folderName = $request->input('folder_name');
+        $folderName = trim($request->input('folder_name'));
         $folderPath = public_path("storage/$folderName");
         if (!File::exists($folderPath)) {
             File::makeDirectory($folderPath, 0777, true, true);
@@ -180,26 +185,23 @@ class UploadController extends Controller
 
     // Delete iamge
     public function delete(Request $request)
-    {   
+    {
         $id = $request->input('picture_id');
-        // dd( $id);
         $image = Picture::find($id);
-
-        if (!$image) {
-            return response()->json(['message' => 'Image not found'], 404);
+        $fileName = $image->picture_name;
+        $folderName = Folder::where('id', $image->folder_id)->pluck('folder_name')[0];
+        $folderPath = public_path("storage/$folderName");
+        
+        if (File::exists("$folderPath/$fileName")) {
+            File::delete("$folderPath/$fileName");
+        } else {
+            return redirect()->back()->with('error', 'Image file not found');
         }
-        Storage::delete($image->path_name);
+        
         $image->delete();
-        // return response()->json(['message' => 'Image Deleted Successsfully!'], 404);
+        
         return redirect()->back()->with('success', 'Image deleted successfully');
-        // try {
-        //     Storage::delete($image->path_name);
-        //     $image->delete();
-        //     return redirect()->back()->with('success', 'Image deleted successfully');
-        // } catch (\Exception $e) {
-        //     return redirect()->back()->with('error', 'An error occurred while deleting the image');
-        // }
-    }
+    } 
 
     public function insertImage(Request $request)
     {
