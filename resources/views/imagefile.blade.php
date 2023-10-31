@@ -71,7 +71,7 @@
             input[type="text"] {
                 width: 300px;
                 border: none;
-                border-bottom: 2px solid black;
+                border-bottom: 2px solid #f1f1f1;
                 border-radius: 4px;
                 padding: 10px;
                 margin: 10px;
@@ -81,7 +81,7 @@
             .container1 {
                 width: 100vw;
                 height: 100vh;
-                background-color: black;
+                background-color: #f1f1f1;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -103,7 +103,7 @@
 
             /* Track */
             #scroller::-webkit-scrollbar-track {
-                background: #f1f1f1;
+                background: #aca8a8;
             }
 
             /* Handle */
@@ -269,7 +269,8 @@
                                                                 @method('DELETE')
  
                                                             <input type="hidden" name="picture_id"
-                                                                value="{{ $image->id }}">                                                               <button class="btn btn-danger delete-image-btn" type="submit">
+                                                                value="{{ $image->id }}">
+                                                                <button class="btn btn-danger delete-image-btn" type="submit">
                                                                     <i class="fa fa-trash"></i> 
                                                                 </button>
                                                             </form>
@@ -330,92 +331,57 @@
                 </div>
             </div>
             <script>
-                // for deleeting Images
-                // function deleteImage(id) {
-                //     console.log(id);
-                //     $('#delete_image_form').submit();
-                // }
-                // moving folder form submit
+// for deleeting Images
+// function deleteImage(id) {
+//     console.log(id);
+//     $('#delete_image_form').submit();
+// }
+// moving folder form submit
 
                 
-                // for deleeting Images
-//                 function destroyfol(id) {
+            // for deleeting Images
+//             function destroyfol(id) {
+// console.log(id);
+// if (confirm("Do you want to delete this folder?")) {
+//     // Change the action attribute dynamically
+//     $('#destroyfol').attr('action', '/folders/' + id + '/delete');
+//     // Submit the form
+//     $('#destroyfol').submit();
+// }
+// }
+// function destroyfol(id) {
 //     console.log(id);
 //     if (confirm("Do you want to delete this folder?")) {
-//         // Change the action attribute dynamically
-//         $('#destroyfol').attr('action', '/folders/' + id + '/delete');
-//         // Submit the form
-//         $('#destroyfol').submit();
+//         // Use Ajax to submit the form
+//         $.ajax({
+//             url: '/folders/' + id + '/delete',
+//             type: 'DELETE',
+//             data: {
+//                 _token: '{{ csrf_token() }}',
+//                 folder_id: id
+//             },
+//             success: function(data) {
+//                 alert("Folder Deleted Successfully");
+//                 // Optionally, you can redirect or perform other actions here
+//             },
+//             error: function(error) {
+//                 console.log(error.responseText);
+//             }
+//         });
 //     }
 // }
-function destroyfol(id) {
-    console.log(id);
-    if (confirm("Do you want to delete this folder?")) {
-        // Use Ajax to submit the form
-        $.ajax({
-            url: '/folders/' + id + '/delete',
-            type: 'DELETE',
-            data: {
-                _token: '{{ csrf_token() }}',
-                folder_id: id
-            },
-            success: function(data) {
-                alert("Folder Deleted Successfully");
-                // Optionally, you can redirect or perform other actions here
-            },
-            error: function(error) {
-                console.log(error.responseText);
-            }
-        });
-    }
-}
 
+// using dleete submit form
+// function deleteImage(id) {
+//     if (confirm("Do you want to delete this picture?")) {
+//         $('#delete_image_form').attr('action', '/pictures/delete/' + id);
+//         $('#delete_image_form').submit();
+//     }
+// }
 
-
-
-                //         document.addEventListener('DOMContentLoaded', function() {
-                //     const submitButton = document.getElementById('submitMove');
-
-                //     submitButton.addEventListener('click', function() {
-                //         document.getElementById('movefolder').submit();
-                //     });
-                // });
-                // show image
-
-                //     // Open the image in a new window
-                //     window.open(url, '_blank');
-                // }
-
-
-                // using dleete submit form
-                // function deleteImage(id) {
-                //     if (confirm("Do you want to delete this picture?")) {
-                //         $('#delete_image_form').attr('action', '/pictures/delete/' + id);
-                //         $('#delete_image_form').submit();
-                //     }
-                // }
-
-                function folderId(id) {
-                    console.log(id);
-                }
-
-                // using deleete 
-                // $(document).ready(function() {
-
-                //     $.ajax({
-                //     url: '{{ route('delete.picture', ['id' => 'task_id']) }}',  
-                //     method: 'POST',
-                //     data: {
-                //         "_token": "{{ csrf_token() }}"
-                //     },
-                //     success: function(data) {
-                //         alert(data.message);
-                //     },
-                //     error: function(error) {
-                //         console.log(error.responseText);
-                //     }
-                //     });
-                //     });
+// function folderId(id) {
+//     console.log(id);
+// }
 
 
                 function ExportToExcel(type, fn, dl) {
