@@ -238,8 +238,8 @@
                                             <tr>
                                                 <th>S No.</th>
                                                 <th scope="col">Images</th>
+                                                <th scope="col">Images Path </th>
                                                 <th scope="col">Images Name</th>
-                                                <th scope="col">Images Path</th>
                                                 <th scope="col">Actions</th>
                                             </tr>
                                         </thead>
@@ -253,7 +253,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td> <img src="{{ $image->path_name }}"
                                                                 alt="{{ $image->picture_name }}" class="image" /> </td>
-                                                        <td>{{ $image->path_name }}</td>
+                                                        <td><a href="{{ $image->path_name }}" target="_blank">{{ $image->path_name }}</a></td>
 
                                                         <td> <label class="form-label" name="pictures"
                                                                 value="">{{ $image->picture_name }}</label></td>

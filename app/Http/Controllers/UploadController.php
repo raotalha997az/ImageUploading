@@ -228,13 +228,15 @@ class UploadController extends Controller
                 $fileName1 = $file->getClientOriginalName();
                 $fileName =  $fileName1;
                 $file->move($folderPath, $fileName);
+                
 
                 $picture = new Picture();
                 $picture->picture_name = $fileName;
-                $picture->path_name = "$currentURL/storage/$new_folder/$fileName";
+                $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
                 $picture->folder_id = $folderId;
                 $picture->save();
             }
+            // dd($uploadedFiles);
         }
 
         return redirect()->back()->with('success', 'Files uploaded successfully.');
