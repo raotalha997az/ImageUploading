@@ -8,8 +8,10 @@
     <link rel="icon" href="{{ asset('public\assets\images\supply_logo_2_1625584870__21391.webp') }}" type="image/x-icon" >
     <div class="logo-container">
  <center>
-    <a href="">
-        <img src="{{ asset('public/assets/images/logo-04.jpg') }}" alt="Logo" class="logo" style="width: 100px; height: 100px;" ></a>
+    <a href="{{ route('folders.show') }}">
+        <img src="{{ asset('public/assets/images/logo-04.jpg') }}" alt="Logo" class="logo" style="width: 100px; height: 100px;">
+    </a>
+    
  </center>
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
