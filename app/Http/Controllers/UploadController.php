@@ -121,6 +121,8 @@ class UploadController extends Controller
     {
         $folder = Folder::find($id);
 
+        // dd($folder->main_folder_id);
+        $main_folder = Folder::where('id',$folder->main_folder_id)->first();
         if (!$folder) {
             return abort(404);
         }
@@ -131,7 +133,7 @@ class UploadController extends Controller
         $foldersall = Folder::where('id', '!=', $id)->get();
         $subfolders = Folder::where('main_folder_id',$id)->get();
         // $SubFolders = Folder::where('main_folder_id' , $id);
-            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders'));
+            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders','main_folder'));
     }
 
     // public function Move(Request $request){

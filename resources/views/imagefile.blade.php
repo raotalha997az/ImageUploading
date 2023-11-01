@@ -195,7 +195,13 @@
                             <div class="row">
                              
                                 <div class="col-lg-6">
-                                    <a href="{{route('folders.show')}}" class="btn-sm m-2  btn btn-primary">Back</a>
+                                    @if($folder->main_folder_id == 0)
+                                        <a href="{{route('folders.show')}}" class="btn-sm m-2  btn btn-primary">Back</a>
+                                    @elseif($folder->main_folder_id != 0)
+
+                                        <a href="{{route('foldersId',[$main_folder->id,$main_folder->folder_name])}}" class="btn-sm m-2  btn btn-primary">Back</a>
+                                    
+                                    @endif
                                 </div>
                                 <div class="col-lg-6">
                                 <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn"
