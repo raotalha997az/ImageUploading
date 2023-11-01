@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('content')
 <x-guest-layout>
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="d-flex justify-content-center align-items-center min-vh-50 mt-5">
         <div class="card w-50">
             <div class="card-body">
 

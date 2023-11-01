@@ -7,7 +7,8 @@
     <title></title>
     <link rel="icon" href="{{ asset('assets\images\supply_logo_2_1625584870__21391.webp') }}" type="image/x-icon" >
     <div class="logo-container">
-        <img src="{{ asset('assets/images/logo-04.jpg') }}" alt="Logo" class="logo" style="width: 100px; height: auto;" >
+     <a href="">
+        <img src="{{ asset('assets/images/logo-04.jpg') }}" alt="Logo" class="logo" style="width: 100px; height: auto;" ></a>
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
