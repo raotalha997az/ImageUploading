@@ -197,7 +197,12 @@
                                 <div class="col-lg-6">
                                     <a href="{{route('folders.show')}}" class="btn-sm m-2  btn btn-primary">Back</a>
                                 </div>
-                                
+                                <div class="col-lg-6">
+                                <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Create
+                            </button>
+                        </div>
                             </div>
                             <div class="folder-container1 mb-2 d-flex">
                                 <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
@@ -279,7 +284,11 @@
                                             </tr>
                                             @endforeach
                                         </tbody>
+                                 
                                     </table>
+                                  
+                                 
+                                 
                                 </div>
                             </div>
                         </div>
@@ -300,7 +309,7 @@
             {{-- html css --}}
 
             <!-- Modal -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            {{-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -326,6 +335,32 @@
                                 Close
                             </button>
                             <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div> --}}
+
+  <!--Create Sub Folder Modal -->
+        <form action="{{ route('subfoldercreate') }}" method="POST">
+            @csrf
+            <input type="hidden" name="folder_id" value="{{$folder->id}}">
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="text" class="form-control" id="input_text" placeholder="Enter folder name"
+                                name="folder_name">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn mb-3" id="btn"> Create</button>
                         </div>
 
                     </div>

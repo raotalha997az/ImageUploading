@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubFolderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/folders', [UploadController::class, 'show'])->name('folders.show');
     Route::get('/folders/{id}/{folder_name}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
     Route::post('/folders/delete', [UploadController::class, 'foldersdestroy'])->name('folderdestroy');
-
-
     Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
+
+    // Sub Folder Routes
+    Route::Post('/subfolder/create', [SubFolderController::class, 'Subcreate'])->name('subfoldercreate');
+
+
  // Alltemplates middleware end
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

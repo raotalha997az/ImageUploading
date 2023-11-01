@@ -112,7 +112,7 @@ class UploadController extends Controller
 
     public function show()
     {
-        $folders = Folder::get();
+        $folders = Folder::where('main_folder_id',0)->get();
         return view('folder', compact('folders'));
     }
 
@@ -129,8 +129,8 @@ class UploadController extends Controller
         $images = Picture::where('folder_id', $id)->get();
         $folders = Folder::where('id', $id)->latest()->first();
         $foldersall = Folder::where('id', '!=', $id)->get();
-
-        return view('imagefile', compact('images', 'folders', 'foldersall', 'folder'));
+        // $SubFolders = Folder::where('main_folder_id' , $id);
+            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder'));
     }
 
     // public function Move(Request $request){
@@ -293,5 +293,7 @@ class UploadController extends Controller
 
     return redirect()->back()->with('success', 'Folder deleted successfully');
 }
+
+
 
 }
