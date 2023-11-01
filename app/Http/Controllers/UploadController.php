@@ -129,8 +129,9 @@ class UploadController extends Controller
         $images = Picture::where('folder_id', $id)->get();
         $folders = Folder::where('id', $id)->latest()->first();
         $foldersall = Folder::where('id', '!=', $id)->get();
+        $subfolders = Folder::where('main_folder_id',$id)->get();
         // $SubFolders = Folder::where('main_folder_id' , $id);
-            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder'));
+            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders'));
     }
 
     // public function Move(Request $request){
@@ -205,44 +206,92 @@ class UploadController extends Controller
 
     public function insertImage(Request $request)
     {
-        $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+        $folder = Folder::where('id',$request->folder_id)->first();
 
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'folder_name' => 'required',
-            'uploads.*' => 'required|file',
-        ]);
+        if($folder->main_folder_id == 0){
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }
-
-        $folderPath = public_path("storage/$new_folder");
-
-        if (!File::isDirectory($folderPath)) {
-            File::makeDirectory($folderPath, 0777, true, true);
-        }
-
-        $currentURL = url('/');
-
-        $uploadedFiles = $request->file('uploads');
-
-        if ($uploadedFiles) {
-            $folderId = $request->input('folder_id');
-
-            foreach ($uploadedFiles as $file) {
-                $fileName1 = $file->getClientOriginalName();
-                $fileName =  $fileName1;
-                $file->move($folderPath, $fileName);
-                
-
-                $picture = new Picture();
-                $picture->picture_name = $fileName;
-                $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
-                $picture->folder_id = $folderId;
-                $picture->save();
+            $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+    
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'folder_name' => 'required',
+                'uploads.*' => 'required|file',
+            ]);
+    
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
             }
-            // dd($uploadedFiles);
+    
+            $folderPath = public_path("storage/$new_folder");
+    
+            if (!File::isDirectory($folderPath)) {
+                File::makeDirectory($folderPath, 0777, true, true);
+            }
+    
+            $currentURL = url('/');
+    
+            $uploadedFiles = $request->file('uploads');
+    
+            if ($uploadedFiles) {
+                $folderId = $request->input('folder_id');
+    
+                foreach ($uploadedFiles as $file) {
+                    $fileName1 = $file->getClientOriginalName();
+                    $fileName =  $fileName1;
+                    $file->move($folderPath, $fileName);
+                    
+    
+                    $picture = new Picture();
+                    $picture->picture_name = $fileName;
+                    $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
+                    $picture->folder_id = $folderId;
+                    $picture->save();
+                }
+                // dd($uploadedFiles);
+            }
+        }
+        elseif($folder->main_folder_id != 0){
+            
+            $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
+            $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+    
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'folder_name' => 'required',
+                'uploads.*' => 'required|file',
+            ]);
+    
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+    
+            $folderPath = public_path("storage/$parentfolder/$new_folder");
+    
+            if (!File::isDirectory($folderPath)) {
+                File::makeDirectory($folderPath, 0777, true, true);
+            }
+    
+            $currentURL = url('/');
+    
+            $uploadedFiles = $request->file('uploads');
+    
+            if ($uploadedFiles) {
+                $folderId = $request->input('folder_id');
+    
+                foreach ($uploadedFiles as $file) {
+                    $fileName1 = $file->getClientOriginalName();
+                    $fileName =  $fileName1;
+                    $file->move($folderPath, $fileName);
+                    
+    
+                    $picture = new Picture();
+                    $picture->picture_name = $fileName;
+                    $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
+                    $picture->folder_id = $folderId;
+                    $picture->save();
+                }
+                // dd($uploadedFiles);
+            }
         }
 
         return redirect()->back()->with('success', 'Files uploaded successfully.');
