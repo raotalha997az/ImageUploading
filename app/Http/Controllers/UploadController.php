@@ -22,7 +22,7 @@ class UploadController extends Controller
     public function upload(Request $request)
     {
         $inputfolder = $request->input('file_name');
-        dd($inputfolder);
+    
         $folder = Folder::create([
             'folder_name' => $request->file_name,
             'path_name' => $request->file_name,
@@ -112,6 +112,7 @@ class UploadController extends Controller
 
     public function show()
     {
+
         $folders = Folder::where('main_folder_id',0)->get();
         return view('folder', compact('folders'));
     }
@@ -169,7 +170,9 @@ class UploadController extends Controller
     //     return to_route('folders');
     // }
     public function Foldercreate(Request $request)
-    {
+    {   
+        $folderId = $request->folder_id;
+
         //   dd($request);  
         $validator = Validator::make($request->all(), [
             'folder_name' => 'required',
@@ -184,6 +187,7 @@ class UploadController extends Controller
             'folder_name' => $folderName,
         ]);
         return redirect()->back()->with('success', 'Folder Created.');
+
     }
 
     // Delete iamge

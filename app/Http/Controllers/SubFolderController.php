@@ -17,24 +17,39 @@ use Illuminate\Support\Facades\Storage;
 
 class SubFolderController extends Controller
 {
-    public function Subcreate(Request $request)  {
+    public function Subcreate(Request $request)
+    {
+
         $folderId = $request->folder_id;
-        $folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
-        // dd($folderinput); 
+        $parentFolder = Folder::where('id', $folderId)->first();
+    
+        if (!$parentFolder) {
+            return redirect()->back()->with('error', 'Parent folder not found');
+        }
+    
         $validator = Validator::make($request->all(), [
             'folder_name' => 'required',
         ]);
-        
-        $folderinput = trim($request->input('folder_name'));
-        $folderPath = public_path("storage/$folder/$folderinput");
     
-        if (!File::exists($folderPath)) {
-            File::makeDirectory($folderPath, 0777, true, true);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
         }
-        $folder = Folder::create([
-            'folder_name' => $folderinput,
-            'main_folder_id'=> $folderId
+    
+        $folderInput = trim($request->input('folder_name'));
+        $folderPath = public_path("storage/{$parentFolder->folder_name}/{$folderInput}");
+    
+        if (File::exists($folderPath)) {
+            return redirect()->back()->with('error', 'Subfolder already exists');
+        }
+    
+        File::makeDirectory($folderPath, 0777, true, true);
+    
+        $subFolder = Folder::create([
+            'folder_name' => $folderInput,
+            'main_folder_id' => $folderId
         ]);
-        return redirect()->back()->with('success', 'Sub Folder Created.');
+    
+        return redirect()->back()->with('success', 'Subfolder Created.');
     }
+    
 }

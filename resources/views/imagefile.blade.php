@@ -227,34 +227,34 @@
         </div>
     </div>
 </form>
-        <div class=""> {{-- folder-container mb-2 d-flex --}}
-
-
-
-        <div id="scroller" style="overflow: scroll;height:68vh">
-            <div class="row">
-                <div class="col-12">
-            <table class="table table-bordered" id="tbl_exporttable_to_xls">
-                <thead>
-                    <tr>
-                <th colspan="5">
-                    <center>
-                        <h1 class="text-center col-14" style="width: fit-content">
-                            {{ $folders->folder_name }}</h1>
-                    </center>
-                </th>
+<div class=""> {{-- folder-container mb-2 d-flex --}}
+    
+    
+    
+    <div id="scroller" style="overflow: scroll;height:68vh">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered" id="tbl_exporttable_to_xls">
+                    <thead>
+                        <tr>
+                            <th colspan="5">
+                                <center>
+                                    <h1 class="text-center col-14" style="width: fit-content">
+                                        {{ $folders->folder_name }}</h1>
+                                    </center>
+                                </th>
+                            </tr>
+                        </thead>
+        <thead>
+            <thead>
+                <th>S No.</th>
+                <th scope="col">Images</th>
+                <th scope="col">Images Path </th>
+                <th scope="col">Images Name</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
-        <thead>
-        <tr>
-            <th>S No.</th>
-            <th scope="col">Images</th>
-            <th scope="col">Images Path </th>
-            <th scope="col">Images Name</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+        <tbody>
         <tr>
             {{-- {{dd($images)}} --}}
             @foreach ($images as $image)
@@ -385,7 +385,7 @@
         <!--Create Sub Folder Modal -->
         <form action="{{ route('subfoldercreate') }}" method="POST">
         @csrf
-        <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+        <input type="hidden" name="folder_id" value="{{ $folders->id }}">
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
