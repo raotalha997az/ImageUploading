@@ -1,8 +1,8 @@
 @extends('layout.app')
 @section('content')
 
-<div class="d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card w-50">
+<div class="d-flex justify-content-center align-items-center min-vh-50 mt-5">
+    <div class="card w-50 ">
         <div class="card-body">
             <x-auth-session-status class="mb-4" :status="session('status')" />
 

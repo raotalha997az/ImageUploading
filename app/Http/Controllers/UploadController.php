@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 // use Storage;
-use Validator;
+
 use App\Models\Folder;
 use App\Models\Upload;
 use App\Models\Picture;
@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 
 
 
@@ -73,8 +75,9 @@ class UploadController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'folder_name' => 'required',
-            'uploads.*' => 'required|file',
+            'uploads.*' => 'required|mimes:jpeg,png,gif',
         ]);
+        
         // $request->validate([
         //     'folder_name' => 'required',
         //     'uploads.*' => 'required|file', // Note the asterisk (*) to validate an array of files
