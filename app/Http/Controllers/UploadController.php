@@ -348,7 +348,7 @@ class UploadController extends Controller
    
     $folderId = $request->input('folder_id');
     $folder = Folder::find($folderId);
-
+    $folder = Folder::where('id',$request->folder_id)->first();
     if (!$folder) {
         return redirect()->back()->with('success', 'Folder not found');
     }
@@ -376,13 +376,15 @@ class UploadController extends Controller
         }
 
         $folderName = $folder->folder_name;
-        $folderPath = public_path("storage/$parentfolder/$new_folder");
-
+        
+        $folderPath = public_path("storage/$parentfolder/$folderName");
+        $folder->delete();
         if (File::exists($folderPath)) {
             File::deleteDirectory($folderPath);
         } else {
-            return redirect()->back()->with('success', 'Folder not found in storage');
+            return redirect()->back()->with('success', 'Folder deleted successfully');
         }
+        $folder->delete();
     }
 
     return redirect()->back()->with('success', 'Folder deleted successfully');
