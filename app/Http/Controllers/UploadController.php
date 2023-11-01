@@ -191,6 +191,9 @@ class UploadController extends Controller
     {
         $id = $request->input('picture_id');
         $image = Picture::find($id);
+        $folder = Folder::where('id',$image->folder_id)->first();
+
+        if($folder->main_folder_id == 0){      
         $fileName = $image->picture_name;
         $folderName = Folder::where('id', $image->folder_id)->pluck('folder_name')[0];
         $folderPath = public_path("storage/$folderName");
@@ -202,7 +205,23 @@ class UploadController extends Controller
         }
         
         $image->delete();
+    }
+    if($folder->main_folder_id != 0){      
+        $fileName = $image->picture_name;
+        $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
+        $folderName = Folder::where('id',$image->folder_id)->pluck('folder_name')->first();
+
+        $folderPath = public_path("storage/$parentfolder/$folderName");
+        // dd($folderName);
+        if (File::exists("$folderPath/$fileName")) {
+            File::delete("$folderPath/$fileName");
+        } else {
+            return redirect()->back()->with('error', 'Image file not found');
+        }
         
+        $image->delete();
+    }
+
         return redirect()->back()->with('success', 'Image deleted successfully');
     } 
 
@@ -321,29 +340,50 @@ class UploadController extends Controller
     //     return redirect()->back()->with('success', 'Folder deleted successfully.');
     // }
     public function foldersdestroy(Request $request)
-{
+    {
+   
     $folderId = $request->input('folder_id');
     $folder = Folder::find($folderId);
 
     if (!$folder) {
-        return redirect()->back()->with('error', 'Folder not found');
+        return redirect()->back()->with('success', 'Folder not found');
     }
 
-    $folderName = $folder->folder_name;
-    $folderPath = public_path("storage/$folderName");
+    // Delete Main Folder code
+    if ($folder->main_folder_id == 0) {
+        $folderName = $folder->folder_name;
+        $folderPath = public_path("storage/$folderName");
 
-    // Delete the folder from the database
-    $folder->delete();
+        // Delete the folder from the database
+        $folder->delete();
 
-    // Check if the folder actually exists in storage and delete it
-    if (File::exists($folderPath)) {
-        File::deleteDirectory($folderPath);
-    } else {
-        return redirect()->back()->with('error', 'Folder not found in storage');
+        // Check if the folder actually exists in storage and delete it
+        if (File::exists($folderPath)) {
+            File::deleteDirectory($folderPath);
+        } else {
+            return redirect()->back()->with('success', 'Folder not found in storage');
+        }
+    } elseif ($folder->main_folder_id != 0) {
+        $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
+        $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+
+        if (!$folder) {
+            return redirect()->back()->with('success', 'Folder not found');
+        }
+
+        $folderName = $folder->folder_name;
+        $folderPath = public_path("storage/$parentfolder/$new_folder");
+
+        if (File::exists($folderPath)) {
+            File::deleteDirectory($folderPath);
+        } else {
+            return redirect()->back()->with('success', 'Folder not found in storage');
+        }
     }
 
     return redirect()->back()->with('success', 'Folder deleted successfully');
 }
+
 
 
 
