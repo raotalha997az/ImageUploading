@@ -250,7 +250,8 @@ class UploadController extends Controller
                 return redirect()->back()->withErrors($validator);
             }
     
-            $folderPath = public_path("storage/$new_folder");
+            // $folderPath = public_path("storage/$new_folder");
+            $folderPath = public_path("$new_folder");
     
             if (!File::isDirectory($folderPath)) {
                 File::makeDirectory($folderPath, 0777, true, true);
@@ -271,7 +272,8 @@ class UploadController extends Controller
     
                     $picture = new Picture();
                     $picture->picture_name = $fileName;
-                    $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
+                    // $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
+                    $picture->path_name = "$currentURL/$new_folder/$fileName";
                     $picture->folder_id = $folderId;
                     $picture->save();
                 }
@@ -293,7 +295,8 @@ class UploadController extends Controller
                 return redirect()->back()->withErrors($validator);
             }
     
-            $folderPath = public_path("storage/$parentfolder/$new_folder");
+            // $folderPath = public_path("storage/$parentfolder/$new_folder");
+            $folderPath = public_path("$parentfolder/$new_folder");
     
             if (!File::isDirectory($folderPath)) {
                 File::makeDirectory($folderPath, 0777, true, true);
@@ -314,7 +317,8 @@ class UploadController extends Controller
     
                     $picture = new Picture();
                     $picture->picture_name = $fileName;
-                    $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
+                    // $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
+                    $picture->path_name = "$currentURL/$parentfolder/$new_folder/$fileName";
                     $picture->folder_id = $folderId;
                     $picture->save();
                 }
