@@ -41,13 +41,13 @@
                     <x-primary-button class="ml-2 btn btn-primary">
                         {{ __('Log in') }}
                     </x-primary-button>
-                  <div class="row">
+                  {{-- <div class="row">
                     <div class="col-lg-3">
                         <a href="{{route('register')}}" class="text-white" style="text-decoration: none;"> <x-primary-button class="ml-2 btn btn-primary mr-2">
                           {{ __('Sign Up') }}</a>  
                         </x-primary-button>
                     </div>
-                  </div> 
+                  </div>  --}}
 
                 </div>
             </form>
