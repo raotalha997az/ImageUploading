@@ -17,10 +17,21 @@
         /* #scroller::-webkit-scrollbar {
             width: 5px;
 
-        } */
+        }
 
         /* Track */
-        /* #scroller::-webkit-scrollbar-track {
+         /* #scroller::-webkit-scrollbar-track {
+            background: #aca8a8;
+        } */
+
+        /* Handle */
+        #scroller::-webkit-scrollbar {
+            width: 5px;
+
+        }
+
+        /* Track */
+        #scroller::-webkit-scrollbar-track {
             background: #aca8a8;
         }
 
@@ -32,19 +43,6 @@
         /* Handle on hover */
         #scroller::-webkit-scrollbar-thumb:hover {
             background: #555;
-        } */
-        #scroller::-webkit-scrollbar {
-          width: 12px; /* Adjust the width as needed */
-        }
-
-        #scroller::-webkit-scrollbar-track {
-            background: #aca8a8;
-        }
-
-        #scroller::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 10px; /* Adjust the border-radius for the rounded corners */
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3); /* Add a box shadow for a smooth appearance */
         }
 
         #btn {
