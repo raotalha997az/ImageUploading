@@ -132,7 +132,7 @@
         }
 
         .container2 {
-            border-radius: 40px;
+            /* border-radius: 40px; */
             display: flex;
             flex-direction: column;
             background: #ffffff;
