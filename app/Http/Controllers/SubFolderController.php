@@ -36,7 +36,8 @@ class SubFolderController extends Controller
         }
     
         $folderInput = trim($request->input('folder_name'));
-        $folderPath = public_path("storage/{$parentFolder->folder_name}/{$folderInput}");
+        // $folderPath = public_path("storage/{$parentFolder->folder_name}/{$folderInput}");
+        $folderPath = public_path("{$parentFolder->folder_name}/{$folderInput}");
     
         if (File::exists($folderPath)) {
             return redirect()->back()->with('error', 'Subfolder already exists');

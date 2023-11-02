@@ -182,7 +182,8 @@ class UploadController extends Controller
         ]);
 
         $folderName = trim($request->input('folder_name'));
-        $folderPath = public_path("storage/$folderName");
+        // $folderPath = public_path("storage/$folderName");
+        $folderPath = public_path("$folderName");
         if (!File::exists($folderPath)) {
             File::makeDirectory($folderPath, 0777, true, true);
         }
