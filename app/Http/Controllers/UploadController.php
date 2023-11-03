@@ -204,7 +204,8 @@ class UploadController extends Controller
         if($folder->main_folder_id == 0){      
         $fileName = $image->picture_name;
         $folderName = Folder::where('id', $image->folder_id)->pluck('folder_name')[0];
-        $folderPath = public_path("storage/$folderName");
+        // $folderPath = public_path("storage/$folderName");
+        $folderPath = public_path("$folderName");
         
         if (File::exists("$folderPath/$fileName")) {
             File::delete("$folderPath/$fileName");
@@ -219,7 +220,8 @@ class UploadController extends Controller
         $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
         $folderName = Folder::where('id',$image->folder_id)->pluck('folder_name')->first();
 
-        $folderPath = public_path("storage/$parentfolder/$folderName");
+        // $folderPath = public_path("storage/$parentfolder/$folderName");
+        $folderPath = public_path("$parentfolder/$folderName");
         // dd($folderName);
         if (File::exists("$folderPath/$fileName")) {
             File::delete("$folderPath/$fileName");
@@ -332,6 +334,116 @@ class UploadController extends Controller
     // }
 
     // new function update images rename like 1234....
+
+    // public function insertImage(Request $request)
+    // {
+    //     $folder = Folder::where('id', $request->folder_id)->first();
+    
+    //     if ($folder->main_folder_id == 0) {
+    //         $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+    
+    //         // Validate the request
+    //         $validator = Validator::make($request->all(), [
+    //             'folder_name' => 'required',
+    //             'uploads.*' => 'required|file',
+    //         ]);
+    
+    //         if ($validator->fails()) {
+    //             return redirect()->back()->withErrors($validator);
+    //         }
+    
+    //         // $folderPath = public_path("storage/$new_folder");
+    //         $folderPath = public_path("$new_folder");
+    
+    //         if (!File::isDirectory($folderPath)) {
+    //             File::makeDirectory($folderPath, 0777, true, true);
+    //         }
+    
+    //         $currentURL = url('/');
+    //         $uploadedFiles = $request->file('uploads');
+    
+    //         if ($uploadedFiles) {
+    //             $folderId = $request->input('folder_id');
+    //             $fileCount = 1; // Initialize the counter for renaming
+    
+    //             foreach ($uploadedFiles as $file) {
+    //                 while (true) {
+    //                     $extension = $file->getClientOriginalExtension();
+    //                     $fileName = "image$fileCount.$extension"; // New name with "imges" prefix and incrementing number
+    //                     $fileCount++; // Increment file count
+        
+    //                     if (!file_exists($folderPath . '/' . $fileName)) {
+    //                         break; // Exit the while loop if the filename is unique
+    //                     }
+    //                 }
+    
+    //                 $file->move($folderPath, $fileName);
+    
+    //                 $picture = new Picture();
+    //                 $picture->picture_name = $fileName;
+    //                 // $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
+    //                 $picture->path_name = "$currentURL/$new_folder/$fileName";
+    //                 $picture->folder_id = $folderId;
+    //                 $picture->save();
+    //             }
+    //         }
+    //     } elseif ($folder->main_folder_id != 0) {
+    //         $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
+    //         $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
+    
+    //         // Validate the request
+    //         $validator = Validator::make($request->all(), [
+    //             'folder_name' => 'required',
+    //             'uploads.*' => 'required|file',
+    //         ]);
+    
+    //         if ($validator->fails()) {
+    //             return redirect()->back()->withErrors($validator);
+    //         }
+    
+    //         // $folderPath = public_path("storage/$parentfolder/$new_folder");
+    //         $folderPath = public_path("$parentfolder/$new_folder");
+    
+    //         if (!File::isDirectory($folderPath)) {
+    //             File::makeDirectory($folderPath, 0777, true, true);
+    //         }
+    
+    //         $currentURL = url('/');
+    //         $uploadedFiles = $request->file('uploads');
+    
+    //         if ($uploadedFiles) {
+    //             $folderId = $request->input('folder_id');
+    //             $fileCount = 1; // Initialize the counter for renaming
+    
+    //             foreach ($uploadedFiles as $file) {
+    //                 while (true) {
+    //                     $extension = $file->getClientOriginalExtension();
+    //                     $fileName = "image$fileCount.$extension"; // New name with "img" prefix and incrementing number
+    //                     $fileCount++; // Increment file count
+        
+    //                     if (!file_exists($folderPath . '/' . $fileName)) {
+    //                         break; // Exit the while loop if the filename is unique
+    //                     }
+    //                 }
+    
+    //                 $file->move($folderPath, $fileName);
+    
+    //                 $picture = new Picture();
+    //                 $picture->picture_name = $fileName;
+    //                 // $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
+    //                 $picture->path_name = "$currentURL/$parentfolder/$new_folder/$fileName";
+    //                 $picture->folder_id = $folderId;
+    //                 $picture->save();
+    //             }
+    //         }
+    //     }
+    
+    //     return redirect()->back()->with('success', 'Files uploaded successfully.');
+    // }
+
+
+
+
     public function insertImage(Request $request)
     {
         $folder = Folder::where('id', $request->folder_id)->first();
@@ -361,83 +473,88 @@ class UploadController extends Controller
     
             if ($uploadedFiles) {
                 $folderId = $request->input('folder_id');
-                $fileCount = 1; // Initialize the counter for renaming
+    
+                // Initialize the image counter from session or cache
+                $imageCounter = session()->get('imageCounter', 1);
     
                 foreach ($uploadedFiles as $file) {
-                    while (true) {
-                        $extension = $file->getClientOriginalExtension();
-                        $fileName = "image$fileCount.$extension"; // New name with "imges" prefix and incrementing number
-                        $fileCount++; // Increment file count
-        
-                        if (!file_exists($folderPath . '/' . $fileName)) {
-                            break; // Exit the while loop if the filename is unique
-                        }
-                    }
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = "image$imageCounter.$extension";
+    
+                    // Increment the counter for the next image
+                    $imageCounter++;
     
                     $file->move($folderPath, $fileName);
     
                     $picture = new Picture();
                     $picture->picture_name = $fileName;
-                    // $picture->path_name = "$currentURL/public/storage/$new_folder/$fileName";
                     $picture->path_name = "$currentURL/$new_folder/$fileName";
                     $picture->folder_id = $folderId;
                     $picture->save();
                 }
+    
+                // Store the updated image counter in session or cache
+                session(['imageCounter' => $imageCounter]);
             }
-        } elseif ($folder->main_folder_id != 0) {
-            $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
-            $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
-    
-            // Validate the request
-            $validator = Validator::make($request->all(), [
-                'folder_name' => 'required',
-                'uploads.*' => 'required|file',
-            ]);
-    
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator);
-            }
-    
-            // $folderPath = public_path("storage/$parentfolder/$new_folder");
-            $folderPath = public_path("$parentfolder/$new_folder");
-    
-            if (!File::isDirectory($folderPath)) {
-                File::makeDirectory($folderPath, 0777, true, true);
-            }
-    
-            $currentURL = url('/');
-            $uploadedFiles = $request->file('uploads');
-    
-            if ($uploadedFiles) {
-                $folderId = $request->input('folder_id');
-                $fileCount = 1; // Initialize the counter for renaming
-    
-                foreach ($uploadedFiles as $file) {
-                    while (true) {
-                        $extension = $file->getClientOriginalExtension();
-                        $fileName = "image$fileCount.$extension"; // New name with "img" prefix and incrementing number
-                        $fileCount++; // Increment file count
+
+    }        elseif ($folder->main_folder_id != 0) {
+                $parentfolder = Folder::where('id', $folder->main_folder_id)->pluck('folder_name')->first();
+                $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
         
-                        if (!file_exists($folderPath . '/' . $fileName)) {
-                            break; // Exit the while loop if the filename is unique
+                // Validate the request
+                $validator = Validator::make($request->all(), [
+                    'folder_name' => 'required',
+                    'uploads.*' => 'required|file',
+                ]);
+        
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator);
+                }
+        
+                // $folderPath = public_path("storage/$parentfolder/$new_folder");
+                $folderPath = public_path("$parentfolder/$new_folder");
+        
+                if (!File::isDirectory($folderPath)) {
+                    File::makeDirectory($folderPath, 0777, true, true);
+                }
+        
+                $currentURL = url('/');
+                $uploadedFiles = $request->file('uploads');
+        
+                if ($uploadedFiles) {
+                    $folderId = $request->input('folder_id');
+    
+                    // Initialize the image counter from session or cache
+                    $imageCounter = session()->get('imageCounter', 1);
+        
+                    foreach ($uploadedFiles as $file) {
+                        while (true) {
+                            $extension = $file->getClientOriginalExtension();
+                            $fileName = "image$imageCounter.$extension"; // New name with "img" prefix and incrementing number
+                            $imageCounter++; // Increment file count
+            
+                            if (!file_exists($folderPath . '/' . $fileName)) {
+                                break; // Exit the while loop if the filename is unique
+                            }
                         }
+        
+                        $file->move($folderPath, $fileName);
+        
+                        $picture = new Picture();
+                        $picture->picture_name = $fileName;
+                        // $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
+                        $picture->path_name = "$currentURL/$parentfolder/$new_folder/$fileName";
+                        $picture->folder_id = $folderId;
+                        $picture->save();
                     }
-    
-                    $file->move($folderPath, $fileName);
-    
-                    $picture = new Picture();
-                    $picture->picture_name = $fileName;
-                    // $picture->path_name = "$currentURL/public/storage/$parentfolder/$new_folder/$fileName";
-                    $picture->path_name = "$currentURL/$parentfolder/$new_folder/$fileName";
-                    $picture->folder_id = $folderId;
-                    $picture->save();
+                    session(['imageCounter' => $imageCounter]);
                 }
             }
+        
+            return redirect()->back()->with('success', 'Files uploaded successfully.');
         }
+  
     
-        return redirect()->back()->with('success', 'Files uploaded successfully.');
-    }
-
     // public function ShowImage($id) {
     //     $img = Picture::where('id',$id)->pluck('path_name');
     //     return view('imageShow', compact('img'));
@@ -470,7 +587,8 @@ class UploadController extends Controller
     // Delete Main Folder code
     if ($folder->main_folder_id == 0) {
         $folderName = $folder->folder_name;
-        $folderPath = public_path("storage/$folderName");
+        // $folderPath = public_path("storage/$folderName");
+        $folderPath = public_path("$folderName");
 
         // Delete the folder from the database
         $folder->delete();
@@ -491,7 +609,8 @@ class UploadController extends Controller
 
         $folderName = $folder->folder_name;
         
-        $folderPath = public_path("storage/$parentfolder/$folderName");
+        // $folderPath = public_path("storage/$parentfolder/$folderName");
+        $folderPath = public_path("$parentfolder/$folderName");
         $folder->delete();
         if (File::exists($folderPath)) {
             File::deleteDirectory($folderPath);
