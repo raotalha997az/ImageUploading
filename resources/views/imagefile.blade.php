@@ -452,7 +452,7 @@
                         </div>
                     </div>
                 </div>
-
+            </form>
                 <script>
                     // for deleeting Images
                     // function deleteImage(id) {

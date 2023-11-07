@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     // Sub Folder Routes
     Route::Post('/subfolder/create', [SubFolderController::class, 'Subcreate'])->name('subfoldercreate');
+    // Route::get('/findmainfolder/{folderId}',[SubFolderController::class, 'FindMainFolder']);
 
 
  // Alltemplates middleware end
