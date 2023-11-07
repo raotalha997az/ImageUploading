@@ -19,7 +19,6 @@ class SubFolderController extends Controller
 {
     public function Subcreate(Request $request)
     {
-
         $folderId = $request->folder_id;
         $parentFolder = Folder::where('id', $folderId)->first();
     
@@ -36,21 +35,49 @@ class SubFolderController extends Controller
         }
     
         $folderInput = trim($request->input('folder_name'));
-        // $folderPath = public_path("storage/{$parentFolder->folder_name}/{$folderInput}");
-        $folderPath = public_path("{$parentFolder->folder_name}/{$folderInput}");
-    
+
+        $parentAll2 = Folder::where('id',$parentFolder->main_folder_id)->first();
+
+        if ($parentFolder->main_folder_id == 0) {
+            $folderPath = public_path("{$parentFolder->folder_name}/{$folderInput}");
+        }
+         elseif($parentAll2->main_folder_id != 0) {
+            $parentAll = Folder::where('id', $parentFolder->main_folder_id)->first();
+            if($parentAll->main_folder_id != 0){
+                $parentFolderMain = Folder::where('id',$parentAll->main_folder_id)->first();
+                $folderPath = public_path("{$parentFolderMain->folder_name}/{$parentAll->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+            }else{
+                $folderPath = public_path("{$parentAll->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+            }
+
+            File::makeDirectory($folderPath, 0777, true, true);
+            Folder::create([
+                'folder_name' => $folderInput,
+                'main_folder_id' => $parentFolder->id
+            ]);
+        }
+        else{
+            $mainParent = Folder::where('id', $parentAll2->main_folder_id)->first();
+            if($mainParent){
+                $folderPath = public_path("{$mainParent->folder_name}/{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+            }else{
+                $folderPath = public_path("{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+            }
+        }
         if (File::exists($folderPath)) {
             return redirect()->back()->with('error', 'Subfolder already exists');
         }
     
         File::makeDirectory($folderPath, 0777, true, true);
     
-        $subFolder = Folder::create([
+        Folder::create([
             'folder_name' => $folderInput,
-            'main_folder_id' => $folderId
+            'main_folder_id' => $parentFolder->id
         ]);
     
         return redirect()->back()->with('success', 'Subfolder Created.');
     }
+    
+        
     
 }
