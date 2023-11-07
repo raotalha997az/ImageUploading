@@ -40,9 +40,10 @@ class SubFolderController extends Controller
     
         if($parentAll2 != null){
             $mainParent = Folder::where('id', $parentAll2->main_folder_id)->first();
-            
+           
             if ($parentFolder->main_folder_id == 0) {
                 $folderPath = public_path("{$parentFolder->folder_name}/{$folderInput}");
+               
             }
              elseif($parentAll2->main_folder_id != 0) {
                 $parentAll = Folder::where('id', $parentFolder->main_folder_id)->first();
@@ -75,27 +76,41 @@ class SubFolderController extends Controller
                 $parentofmain = Folder::where('id',$mainParent->main_folder_id)->first();
                 if($parentofmain->main_folder_id == 0){
                     $folderPath = public_path("{$parentofmain->folder_name}/{$mainParent->folder_name}/{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
-                    // dd($folderPath);
-                    // dd('ASDASDSADSAD');
                 }
-            }
-            if (File::exists($folderPath)) {
-                return redirect()->back()->with('error', 'Subfolder already exists');
             }
             
-            $parentfourth = Folder::where('id',$mainParent->main_parent_id)->first();
+            
+            $parentfourth = Folder::where('id',$mainParent->main_folder_id)->first();
+            $parentofparentofmain = Folder::where('id',$parentAll2->main_folder_id)->first();
+
             if($parentfourth != null){
                 if($parentfourth->main_folder_id == 0){
-                    $folderPath = public_path("{$parentfourth->folder_name}/{$parentofmain->folder_name}/{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+                    $folderPath = public_path("{$parentfourth->folder_name}/{$parentofparentofmain->folder_name}/{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+                    // dd($folderPath);
+                }
+                elseif($parentfourth->main_folder_id != 0){
+                    $folderInput = trim($request->input('folder_name'));
+                    $parentofmain = Folder::where('id',$mainParent->main_folder_id)->first();
+                    $parentofparentFolder = Folder::where('id',$parentFolder->main_folder_id)->first();
+                    $mainParent = Folder::where('id', $parentofparentFolder->main_folder_id)->first();
+                    $parentfifth = Folder::where('id',$parentFolder->id)->first();
+                    // dd($parentofparentFolder);
+                    $parentfourth = Folder::where('id',$parentfifth->main_folder_id)->first();
+                    $parentofparentofmain = Folder::where('id',$parentofmain->main_folder_id)->first();
+                    $parentofparentAll2 = Folder::where('id',$parentofparentFolder->main_folder_id)->first();
+                    if($parentofmain->main_folder_id != 0){
+                        $folderPath = public_path("{$parentofparentofmain->folder_name}/{$parentofmain->folder_name}/{$parentofparentAll2->folder_name}/{$parentAll2->folder_name}/{$parentFolder->folder_name}/{$folderInput}");
+                    }
                 }
             }
-        }
+            
+            
+        } 
         // dd($folderPath);
-        // dd('JKHKJKKK');
-
-            File::makeDirectory($folderPath, 0777, true, true);
         
-            Folder::create([
+        File::makeDirectory($folderPath, 0777, true, true);
+        
+        Folder::create([
                 'folder_name' => $folderInput,
                 'main_folder_id' => $parentFolder->id
             ]);
