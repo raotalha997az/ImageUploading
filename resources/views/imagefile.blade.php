@@ -280,34 +280,18 @@
                                                                 <i class="fa fa-eye"></i>
                                                             </button></a>
 
-                                                        @if ($folder->main_folder_id == 0)
+                                                        
                                                             <form class="delete-image-form" method="POST"
                                                                 action="{{ route('delete.picture', ['id' => $image->id]) }}">
                                                                 @csrf
                                                                 @method('DELETE')
-
-                                                                <input type="hidden" name="picture_id"
-                                                                    value="{{ $image->id }}">
-                                                                <button class="btn btn-danger delete-image-btn"
-                                                                    type="submit">
+                                                                <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+                                                                <input type="hidden" name="picture_id" value="{{ $image->id }}">
+                                                                <button type="submit" class="btn btn-danger delete-image-btn"  type="submit">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             </form>
-                                                            {{-- Delete SubFolder Button  --}}
-                                                        @elseif($folder->main_folder_id != 0)
-                                                            <form class="delete-image-form" method="POST"
-                                                                action="{{ route('delete.picture', ['id' => $image->id]) }}">
-                                                                @csrf
-                                                                @method('DELETE')
-
-                                                                <input type="hidden" name="picture_id"
-                                                                    value="{{ $image->id }}">
-                                                                <button class="btn btn-danger delete-image-btn"
-                                                                    type="submit">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
+                                                        
                                                     </td>
                                             </tr>
                                             @endforeach

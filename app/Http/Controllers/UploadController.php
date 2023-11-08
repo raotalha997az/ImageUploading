@@ -140,38 +140,7 @@ class UploadController extends Controller
             return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders','main_folder'));
     }
 
-    // public function Move(Request $request){
-    //     $new_folder = Folder::where('id',$request->folder_id)->pluck('folder_name');
-    //     // dd($request);
-    //     foreach($request->pictures as $picture){
-    //         Picture::where('id',$picture)->update([
-    //             'folder_id' => $request->folder_id
-    //         ]);
-
-    //         $picture_name = Picture::where('id', $picture)->pluck('picture_name');
-
-
-    //         $sourceFolder = "storage/{$request->old_folder}";
-    //         $targetFolder = "storage/{$new_folder}"; 
-
-    //         // Check if the source folder exists
-    //         if (File::exists($sourceFolder)) {
-    //             // Get a list of all files in the source folder
-    //             $files = File::allFiles($sourceFolder);
-
-    //             // Move each file to the target folder
-    //             foreach ($files as $file) {
-    //                 $newFilePath = "{$targetFolder}/{$picture_name}";
-    //                 $cleanFolderName = str_replace(['[', ']', '&quot;'], '',$new_folder);
-    //                 File::move($file->getPathname(), $newFilePath);
-    //             }
-    //         } 
-
-    //     }
-
-
-    //     return to_route('folders');
-    // }
+    
     public function Foldercreate(Request $request)
     {   
         $folderId = $request->folder_id;
@@ -196,15 +165,16 @@ class UploadController extends Controller
 
     // Delete iamge
     public function delete(Request $request)
-    { 
-
+    {   
         $id = $request->input('picture_id');
-        $image = Picture::find($id);
-        $folder = Folder::where('id',$image->folder_id)->first();
-
-        if($folder->main_folder_id == 0){      
+        $image = Picture::where('id',$request->picture_id)->first();
         $fileName = $image->picture_name;
-        $new_folder = Folder::where('id', $image->folder_id)->pluck('folder_name')[0];
+        
+        // dd($fileName);
+
+        $new_folder = Folder::where('id', $request->folder_id)->first();
+
+
         if($new_folder->main_folder_id == 0){
             $folderPath = public_path("$new_folder->folder_name");
             $folderPath2 = ("/".$new_folder->folder_name);
@@ -215,8 +185,6 @@ class UploadController extends Controller
                 
                 $folderPath = public_path($parent1->folder_name."/".$new_folder->folder_name);
                 $folderPath2 = ($parent1->folder_name."/".$new_folder->folder_name);
-                // dd($folderPath2);
-
             }else{
                 if($parent1->main_folder_id == 0){
                     $folderPath = public_path($parent1->folder_name."/".$new_folder->folder_name);
@@ -256,15 +224,11 @@ class UploadController extends Controller
                                             }}}}}}}}}}
         // $folderPath = public_path("storage/$folderName");
         // $folderPath = public_path("$folderName");
-        
-        if (File::exists("$folderPath/$fileName")) {
-            File::delete("$folderPath/$fileName");
-        } else {
-            return redirect()->back()->with('error', 'Image file not found');
-        }
+        // dd($folderPath);
+        File::delete("$folderPath/$fileName");
         
         $image->delete();
-    }
+    
    
 
         return redirect()->back()->with('success', 'Image deleted successfully');
@@ -499,7 +463,7 @@ class UploadController extends Controller
             $new_folder = Folder::where('id', $request->folder_id)->first();
             if($new_folder->main_folder_id == 0){
                 $folderPath = public_path("$new_folder->folder_name");
-                $folderPath2 = ("/".$new_folder->folder_name);
+                $folderPath2 = ($new_folder->folder_name);
             }
             else{
                 $parent1 = Folder::where('id',$new_folder->main_folder_id)->first();
@@ -610,72 +574,7 @@ class UploadController extends Controller
     // }
     public function foldersdestroy(Request $request)
     {
-        // $folder = Folder::where('id', $request->folder_id)->first();
-    
-       
-        $new_folder = Folder::where('id', $request->folder_id)->pluck('folder_name')->first();
-
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'folder_name' => 'required',
-            'uploads.*' => 'required|file',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }
-
-        $new_folder = Folder::where('id', $request->folder_id)->first();
-        if($new_folder->main_folder_id == 0){
-            $folderPath = public_path("$new_folder->folder_name");
-            $folderPath2 = ("/".$new_folder->folder_name);
-        }
-        else{
-            $parent1 = Folder::where('id',$new_folder->main_folder_id)->first();
-            if($parent1->main_folder_id == 0){
-                
-                $folderPath = public_path($parent1->folder_name."/".$new_folder->folder_name);
-                $folderPath2 = ($parent1->folder_name."/".$new_folder->folder_name);
-                // dd($folderPath2);
-
-            }else{
-                if($parent1->main_folder_id == 0){
-                    $folderPath = public_path($parent1->folder_name."/".$new_folder->folder_name);
-                    $folderPath2 = ($parent1->folder_name."/".$new_folder->folder_name);
-                }else{
-                    if($parent1->main_folder_id != 0){
-                        $parent2 = Folder::where('id',$parent1->main_folder_id)->first();
-                        if($parent2->main_folder_id == 0){
-                            $folderPath = public_path($parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                            $folderPath2 = ($parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                        }else{
-                            if($parent2->main_folder_id != 0){
-                                $parent3 = Folder::where('id',$parent2->main_folder_id)->first();
-                                if($parent3->main_folder_id == 0){
-                                    $folderPath = public_path($parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                                    $folderPath2 = ($parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                                }else{
-                                    if($parent3->main_folder_id == 0){
-                                        $folderPath = public_path($parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                                        $folderPath2 = ($parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);
-                                    }else{
-                                        $parent4 = Folder::where('id',$parent3->main_folder_id)->first();
-                                        if($parent4->main_folder_id == 0){
-                                            $folderPath = public_path($parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                            $folderPath2 = ($parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                        }
-                                        else{
-                                            $parent5 = Folder::where('id',$parent4->main_folder_id)->first();
-                                            if($parent5->main_folder_id == 0)
-                                            {
-                                                $folderPath = public_path($parent5->folder_name."/".$parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                                $folderPath2 = ($parent5->folder_name."/".$parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                            }
-                                            else{
-                                                $folderPath = public_path($parent5->folder_name."/".$parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                                $folderPath2 = ($parent5->folder_name."/".$parent4->folder_name."/".$parent3->folder_name."/".$parent2->folder_name."/".$parent1->folder_name."/".$new_folder->folder_name);                                                
-                                            }}}}}}}}}}
-
+   
     $folderId = $request->input('folder_id');
     $folder = Folder::find($folderId);
     $folder = Folder::where('id',$request->folder_id)->first();
