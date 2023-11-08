@@ -184,13 +184,7 @@
 
             <div class="container1">
                 <div class="container3">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session()->get('success') }}
-
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                    
                     <form action="{{ route('insert.Image') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         {{-- <div class="container"> --}}
@@ -231,7 +225,18 @@
                             </div>
                     </form>
                     <div class=""> {{-- folder-container mb-2 d-flex --}}
-
+                        {{-- sessions messages  --}}
+                       @if (session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session()->get('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @elseif (session()->has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session()->get('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
 
                         <div id="scroller" style="overflow: scroll;height:68vh">
@@ -374,42 +379,6 @@
                 </div>
             </div>
             {{-- Delete Modal End --}}
-
-            {{-- html css --}}
-
-            <!-- Modal -->
-            {{-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel"> </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body col-auto">
-                        @foreach ($foldersall as $folder)
-                            <div class="d-flex m-5">
-                                <input type="radio" class="form-check" value="{{ $folder->id }}"
-                                    name="folder_id">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9CAMAAAC4XpwXAAAA5FBMVEX/z2b///8AAAD/vCv/0Wf/wy2SbRmYmJjdt1oEAAB6WhWt3ui/9f+n1t7/zFwWEQl6ZDH/2GsXFxc4KQmoqKiQkJCgoKDZpCWoiURwVBP/pDb5+fn/rDiJiYmNaRh6Txq2trZ6enqachpwShjAwMDm5uZUVFSM6v/U1NQxIwizhR5wcHDnrCckJCRCMgsrKytlZWV+0ugOFxpDNhpPQCA4IwwuHgrunDOdZiHjkjC8eSitcSVXOROR1+io7/95ytkxP0NhfYOnw8jW+v/G6O5cRQ/MmiMiGQZgTSa/nE2XfT7/xkxzH3JTAAAClklEQVRoge3baVMaQRAG4HVkOTRIOETZg6wGiCACUSCHmsscJv7//5PpWSAG0Jrp7R2pst8vfNmah56Z2oHabWfrKeOw/pz1dqtW10mrTa+fdIR2RifEel3fhtRJ9dAMF2KfUI9gwG7vQCu9KVwdkuk+DJd13W2tuG4Wrj+i0qH0hqat/GNC3jkVotDXxyXfpJt850yIgUHpC55k6zlyoB0znbB6jE639iidjMfpVJOP1Im2HlanqR6tz9ZeVBAZjmrthPqcRyb0k+mzycem006my+qriEwm05Li/WS6PPIQCYLg3XvgjxLquHieF3wAvr3QUWXgEgAP1dcXeq+ZtZXmR8l7cu07M93tJdm+xrkMvOBK3ivmesOq/lrqr+Tnxujnxd2Uc/0Wcr5ef5F2Pr2BbKReVIkv3C2mkOvPkMpju+4L4F9T3naTy4f2/Lebm+/DlHUhqldr9SEc/KPUdZV7eqWmon51+FHNLFH8fW8PdXL8Y42e5BdaS+4l0c2XdbLnuv3qiu7jcfU3fJzJODrZgyO1Sqe3YKgLRw+P9Z9kusLHurjSt90ukW6Iz/QGjW427Qt9h0SPTHFK3bhySt10zR/WLeErutuX975Kbt80ofm0r+oHgwQnhWnly/qvBLZ55cu6SqGEyq05vqqPf+dx0TxYHtX/lDPImNsr+ssyZhB0/tdLeVQJRPqF3dKXdMsTzzrrrLPOOuuss84666yzzjrrrLPOOuuss84666yzzrp9/eypnkkNhBiqvgnLz+PuQO8XhDhVPSOWp16VDq+cRHG/DP45LCJ3i7Yb34nfGZkeIp9BIwItR/Cqj4ju9UkVLEXME6J6xIiS20L0xxGlo9rs/vUG5uylNm8x3Ii+SNafmf4X+FmtCiQYY4AAAAAASUVORK5CYII="
-                                    style="height: 50px;width:50px;" alt="">
-                                <label for="folder_id" class="form-label"
-                                    style="margin-left: 20px">{{ $folder->folder_name }}</label>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-
-                </div>
-            </div>
-        </div> --}}
-
             <!--Create Sub Folder Modal -->
             <form action="{{ route('subfoldercreate') }}" method="POST">
                 @csrf
@@ -438,60 +407,7 @@
                 </div>
             </form>
                 <script>
-                    // for deleeting Images
-                    // function deleteImage(id) {
-                    //     console.log(id);
-                    //     $('#delete_image_form').submit();
-                    // }
-                    // moving folder form submit
-
-
-                    // for deleeting Images
-                    //             function destroyfol(id) {
-                    // console.log(id);
-                    // if (confirm("Do you want to delete this folder?")) {
-                    //     // Change the action attribute dynamically
-                    //     $('#destroyfol').attr('action', '/folders/' + id + '/delete');
-                    //     // Submit the form
-                    //     $('#destroyfol').submit();
-                    // }
-                    // }
-                    // function destroyfol(id) {
-                    //     console.log(id);
-                    //     if (confirm("Do you want to delete this sub folder?")) {
-                    //         // Use Ajax to submit the form
-                    //         $.ajax({
-                    //             url: '/folders/' + id + '/delete',
-                    //             type: 'DELETE',
-                    //             data: {
-                    //                 _token: '{{ csrf_token() }}',
-                    //                 folder_id: id
-                    //             },
-                    //             success: function(data) {
-                    //                 alert("Folder Deleted Successfully");
-                    //                 // Optionally, you can redirect or perform other actions here
-                    //             },
-                    //             error: function(error) {
-                    //                 console.log(error.responseText);
-                    //             }
-                    //         });
-                    //     }
-                    // }
-
-                    // using dleete submit form
-                    // function deleteImage(id) {
-                    //     if (confirm("Do you want to delete this picture?")) {
-                    //         $('#delete_image_form').attr('action', '/pictures/delete/' + id);
-                    //         $('#delete_image_form').submit();
-                    //     }
-                    // }
-
-                    // function folderId(id) {
-                    //     console.log(id);
-                    // }
-
-
-                    function ExportToExcel(type, fn, dl) {
+                        function ExportToExcel(type, fn, dl) {
                         var elt = document.getElementById('tbl_exporttable_to_xls');
                         var wb = XLSX.utils.table_to_book(elt, {
                             sheet: "sheet1"

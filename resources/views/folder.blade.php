@@ -111,13 +111,18 @@
     <body>
         <div class="container1">        
             <div class="folder-container mb-2 d-flex" style="overflow:scroll;" id="scroller">
-                @if (session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session()->get('success') }}
-    
+              {{-- sessions messages  --}}
+              @if (session()->has('success'))
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  {{ session()->get('success') }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @elseif (session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session()->get('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                @endif
+            @endif
                 <div class="header d-flex">
                     <h1 class="text-center">Folders</h1>
                     <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn"
@@ -141,7 +146,7 @@
                     <div class="row">
                         
 
-                      {{-- {{dd($folders->main_folder_id)}} --}}
+              
                         @foreach ($folders as $folder)
                         {{-- @if($folders->main_folder_id == 0) --}}
                             <div class="col-md-3 mt-5 ">
@@ -203,7 +208,7 @@
         <!-- Button trigger modal -->
 
 
-        <!-- Modal -->
+        <!-- Modal Folder Create -->
         <form action="{{ route('foldercreate') }}" method="POST">
             @csrf
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -232,24 +237,7 @@
             function destroyfol(id) {
     console.log(id);
     $('#folder_id_delete').val(id);
-    // if (confirm("Do you want to delete this folder?")) {
-    //     // Use Ajax to submit the form
-    //     $.ajax({
-    //         url: '/folders/' + id + '/delete',
-    //         type: 'DELETE',
-    //         data: {
-    //             _token: '{{ csrf_token() }}',
-    //             folder_id: id
-    //         },
-    //         success: function(data) {
-    //             alert("Folder Deleted Successfully");
-    //             // Optionally, you can redirect or perform other actions here
-    //         },
-    //         error: function(error) {
-    //             console.log(error.responseText);
-    //         }
-    //     });
-    // }
+ 
 }
         </script>
     </body>
