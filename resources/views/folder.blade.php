@@ -1,4 +1,5 @@
 @extends('layout.app')
+<link rel="icon" href="{{ asset('/assets/images/supply_logo_2.png') }}" type="image/x-icon">
 @section('content')
     <style>
         :root {

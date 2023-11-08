@@ -306,7 +306,7 @@ class UploadController extends Controller
                     $folderpathtrim = trim($folderPath2);
                     $picture = new Picture();
                     $picture->picture_name = $fileName;
-                    $picture->path_name = "/$folderPath2/$fileName";
+                    $picture->path_name = "$currentURL/$folderPath2/$fileName";
                     $picture->folder_id = $folderId;
                     $picture->save();
                 }
