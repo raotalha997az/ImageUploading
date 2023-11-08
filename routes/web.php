@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/folders', [UploadController::class, 'show'])->name('folders.show');
     Route::get('/folders/{id}/{folder_name}', [UploadController::class, 'foldersimgshow'])->name('foldersId');
     Route::post('/folders/delete', [UploadController::class, 'foldersdestroy'])->name('folderdestroy');
-    Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
+    // Route::post('/upload', [UploadController::class, 'upload'])->name('uploading');
 
     // Sub Folder Routes
     Route::Post('/subfolder/create', [SubFolderController::class, 'Subcreate'])->name('subfoldercreate');

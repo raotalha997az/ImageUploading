@@ -21,26 +21,26 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadController extends Controller
 {
-    public function upload(Request $request)
-    {
-        $inputfolder = $request->input('file_name');
+    // public function upload(Request $request)
+    // {
+    //     $inputfolder = $request->input('file_name');
     
-        $folder = Folder::create([
-            'folder_name' => $request->file_name,
-            'path_name' => $request->file_name,
-        ]);
-        foreach ($request->pictures as $picture) {
-            Picture::created([
-                'picture_name' => $picture['name'],
-                'folder_id' => $folder->id,
-            ]);
-        }
-    }
+    //     $folder = Folder::create([
+    //         'folder_name' => $request->file_name,
+    //         'path_name' => $request->file_name,
+    //     ]);
+    //     foreach ($request->pictures as $picture) {
+    //         Picture::created([
+    //             'picture_name' => $picture['name'],
+    //             'folder_id' => $folder->id,
+    //         ]);
+    //     }
+    // }
 
-    public function  index()
-    {
-        return view('sampleupload');
-    }
+    // public function  index()
+    // {
+    //     return view('sampleupload');
+    // }
 
 
     public function uploading(Request $request)
