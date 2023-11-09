@@ -344,13 +344,14 @@
                                     </div>
                                     {{-- Folders image table --}}
                                     <div class="row">
+                                        {{-- <div class="col-12" style="width:100%; display:none;"> --}}
                                         <div class="col-12" style="width:100%; display:none;">
-                                            <table class="table table-bordered" id="tbl_exporttable_to_xls">
+                                            {{-- <table class="table table-bordered" id="tbl_exporttable_to_xls">
                                                 <thead>
                                                     <tr>
-                                                        <tr>
-                                                            <th>Internal ID</th>
-                                                            <th>ITEM IMAGE URL 1</th>
+                                                    <tr>
+                                                        <th>Internal ID</th>
+                                                        <th>ITEM IMAGE URL 1</th>
                                                             <th>ITEM IMAGE URL 2</th>
                                                             <th>ITEM IMAGE URL 3</th>
                                                             <th>ITEM IMAGE URL 4</th>
@@ -358,21 +359,76 @@
                                                             <th>ITEM IMAGE URL 6</th>
                                                             <th>ITEM IMAGE URL 7</th>
                                                             <th>ITEM IMAGE URL 8</th>
-                                                        </tr>
+                                                            @if (count($subfolders) > 0)
+                                                            @php
+                                                                $firstFolderImages = App\Models\Picture::where('folder_id', $subfolders[0]->id)->get();
+                                                            @endphp
+                                                            @foreach ($firstFolderImages as $index => $image)
+                                                                <th>ITEM IMAGE URL {{ $index + 1 }}</th>
+                                                            @endforeach
+                                                        @endif
+
+                                                    </tr>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach ($subfolders as $folder)
-                                                <tr>
-                                                    <td>{{ $folder->folder_name }}</td>
-                                                        @php
-                                                            $images = App\Models\Picture::where('folder_id', $folder->id)->get();
-                                                        @endphp
-                                                        @foreach ($images as $image)
-                                                           <td> {{ $image->path_name }}</td>
-                                                        @endforeach          
-                                                </tr>
+                                                    @foreach ($subfolders as $folder)
+                                                        <tr>
+                                                            <td>{{ $folder->folder_name }}</td>
+                                                            @php
+                                                                $images = App\Models\Picture::where('folder_id', $folder->id)->get();
+                                                            @endphp
+                                                            @foreach ($images as $image)
+                                                                <td> {{ $image->path_name }}</td>
+                                                            @endforeach
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table> --}}
+                                            @php
+                                                $maxImageCount = 0;
+                                                $folderWithMaxImages = null;
+                                            @endphp
+
+                                            @foreach ($subfolders as $folder)
+                                                @php
+                                                    $imageCount = App\Models\Picture::where('folder_id', $folder->id)->count();
+                                                    if ($imageCount > $maxImageCount) {
+                                                        $maxImageCount = $imageCount;
+                                                        $folderWithMaxImages = $folder;
+                                                    }
+                                                @endphp
                                             @endforeach
+
+                                            <table class="table table-bordered" id="tbl_exporttable_to_xls">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Internal ID</th>
+                                                        @if ($folderWithMaxImages)
+                                                            @php
+                                                                $maxImages = App\Models\Picture::where('folder_id', $folderWithMaxImages->id)->get();
+                                                            @endphp
+                                                            @foreach ($maxImages as $index => $image)
+                                                                <th>ITEM IMAGE URL {{ $index + 1 }}</th>
+                                                            @endforeach
+                                                        @endif
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($subfolders as $folder)
+                                                        <tr>
+                                                            <td>{{ $folder->folder_name }}</td>
+                                                            @php
+                                                                $images = App\Models\Picture::where('folder_id', $folder->id)->get();
+                                                            @endphp
+                                                            @foreach ($images as $image)
+                                                                <td>{{ $image->path_name }}</td>
+                                                            @endforeach
+                                                            @for ($i = 0; $i < $maxImageCount - count($images); $i++)
+                                                                <td></td>
+                                                            @endfor
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
