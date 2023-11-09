@@ -96,8 +96,7 @@ class UploadController extends Controller
     public function foldersimgshow($id)
     {
         $folder = Folder::find($id);
-
-        // dd($folder->main_folder_id);
+       
         $main_folder = Folder::where('id',$folder->main_folder_id)->first();
         if (!$folder) {
             return abort(404);
@@ -106,10 +105,18 @@ class UploadController extends Controller
         // Retrieve images associated with the folder
         $images = Picture::where('folder_id', $id)->get();
         $folders = Folder::where('id', $id)->latest()->first();
+       
         $foldersall = Folder::where('id', '!=', $id)->get();
         $subfolders = Folder::where('main_folder_id',$id)->get();
+       
+        // $folderid= Picture::where('folder_id',$subfolders);
+// Query For Sub folder images out side
+        $folderIds = $subfolders->pluck('id');
+        $pictures = Picture::whereIn('folder_id', $folderIds)->get();
+        $picturePaths = $pictures->pluck('path_name');
+        // dd($picturePaths);
         // $SubFolders = Folder::where('main_folder_id' , $id);
-            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders','main_folder'));
+            return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders','main_folder','picturePaths'));
     }
 
     

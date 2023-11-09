@@ -185,7 +185,7 @@
 
             <div class="container1">
                 <div class="container3">
-                    
+
                     <form action="{{ route('insert.Image') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         {{-- <div class="container"> --}}
@@ -227,17 +227,19 @@
                     </form>
                     <div class=""> {{-- folder-container mb-2 d-flex --}}
                         {{-- sessions messages  --}}
-                       @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session()->get('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @elseif (session()->has('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session()->get('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                        @if (session()->has('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session()->get('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @elseif (session()->has('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session()->get('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
 
 
                         <div id="scroller" style="overflow: scroll;height:68vh">
@@ -286,18 +288,21 @@
                                                                 <i class="fa fa-eye"></i>
                                                             </button></a>
 
-                                                        
-                                                            <form class="delete-image-form" method="POST"
-                                                                action="{{ route('delete.picture', ['id' => $image->id]) }}">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <input type="hidden" name="folder_id" value="{{ $folder->id }}">
-                                                                <input type="hidden" name="picture_id" value="{{ $image->id }}">
-                                                                <button type="submit" class="btn btn-danger delete-image-btn"  type="submit">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        
+
+                                                        <form class="delete-image-form" method="POST"
+                                                            action="{{ route('delete.picture', ['id' => $image->id]) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="hidden" name="folder_id"
+                                                                value="{{ $folder->id }}">
+                                                            <input type="hidden" name="picture_id"
+                                                                value="{{ $image->id }}">
+                                                            <button type="submit" class="btn btn-danger delete-image-btn"
+                                                                type="submit">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+
                                                     </td>
                                             </tr>
                                             @endforeach
@@ -337,78 +342,103 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    {{-- Folders image table --}}
+                                    <div class="row">
+                                        <div class="col-12" style="width:100%; ">
+                                            <table class="table table-bordered" id="tbl_exporttable_to_xls">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Folder Name</th>
+                                                        @foreach ($picturePaths as $path)
+                                                            <th>Image URL</th>
+                                                        @endforeach
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach ($subfolders as $folder)
+                                                    <tr>
+                                                        <td> {{ $folder->folder_name }} </td>
+                                                        @foreach ($picturePaths as $path)
+                                                            <td>{{ $path }}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="old_folder" value="{{ $folder->folder_name }}">
+                                {{-- {{dd($images)}} --}}
+                                <div class="image-container">
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="old_folder" value="{{ $folder->folder_name }}">
-                        {{-- {{dd($images)}} --}}
-                        <div class="image-container">
-
-                        </div>
-                        <!-- Button trigger modal -->
                     </div>
                 </div>
-            </div>
-            </div>
 
 
-            {{-- Delete Modal --}}
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete Folder</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>are you sure to delete this folder</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <form id="destroyfol" class="delete-image-form" method="POST"
-                                action="{{ route('folderdestroy') }}">
-                                @csrf
-
-                                <input type="hidden" name="folder_id" id="folder_id_delete">
-
-                                <button type="submit" class="btn btn-primary">Yes</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Delete Modal End --}}
-            <!--Create Sub Folder Modal -->
-            <form action="{{ route('subfoldercreate') }}" method="POST">
-                @csrf
-                <input type="hidden" name="folder_id" value="{{ $folders->id }}">
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                {{-- Delete Modal --}}
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
+                                <h5 class="modal-title" id="exampleModalLabel">Delete Folder</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-
                             <div class="modal-body">
-                                <input type="text" class="form-control" id="input_text"
-                                    placeholder="Enter folder name" name="folder_name">
+                                <p>are you sure to delete this folder</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn mb-3" id="btn"> Create</button>
-                            </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                <form id="destroyfol" class="delete-image-form" method="POST"
+                                    action="{{ route('folderdestroy') }}">
+                                    @csrf
 
+                                    <input type="hidden" name="folder_id" id="folder_id_delete">
+
+                                    <button type="submit" class="btn btn-primary">Yes</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
+                {{-- Delete Modal End --}}
+                <!--Create Sub Folder Modal -->
+                <form action="{{ route('subfoldercreate') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="folder_id" value="{{ $folders->id }}">
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Folder</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <input type="text" class="form-control" id="input_text"
+                                        placeholder="Enter folder name" name="folder_name">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn mb-3" id="btn"> Create</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <script>
-                        function ExportToExcel(type, fn, dl) {
+                    function ExportToExcel(type, fn, dl) {
                         var elt = document.getElementById('tbl_exporttable_to_xls');
                         var wb = XLSX.utils.table_to_book(elt, {
                             sheet: "sheet1"
