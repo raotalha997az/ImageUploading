@@ -114,6 +114,7 @@ class UploadController extends Controller
         $folderIds = $subfolders->pluck('id');
         $pictures = Picture::whereIn('folder_id', $folderIds)->get();
         $picturePaths = $pictures->pluck('path_name');
+
         // dd($picturePaths);
         // $SubFolders = Folder::where('main_folder_id' , $id);
             return view('imagefile', compact('images', 'folders', 'foldersall', 'folder','subfolders','main_folder','picturePaths'));

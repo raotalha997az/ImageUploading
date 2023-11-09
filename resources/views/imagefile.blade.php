@@ -348,24 +348,43 @@
                                             <table class="table table-bordered" id="tbl_exporttable_to_xls">
                                                 <thead>
                                                     <tr>
-                                                        <th>Folder Name</th>
+                                                        {{-- <th>Folder Name</th>
                                                         @foreach ($picturePaths as $path)
                                                             <th>Image URL</th>
-                                                        @endforeach
-
+                                                        @endforeach --}}
+                                                        <tr>
+                                                            <th>Folder Name</th>
+                                                            {{-- @foreach ($images as $image)
+                                                            <th>Image URL</th>
+                                                         @endforeach --}}
+                                                            
+                                                        </tr>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
-                                                    @foreach ($subfolders as $folder)
+                                                    {{-- @foreach ($subfolders as $folder)
                                                     <tr>
                                                         <td> {{ $folder->folder_name }} </td>
                                                         @foreach ($picturePaths as $path)
                                                             <td>{{ $path }}</td>
                                                         @endforeach
                                                     </tr>
-                                                @endforeach
-
+                                                @endforeach --}}
+                                                @foreach ($subfolders as $folder)
+                                                <tr>
+                                                    <td>{{ $folder->folder_name }}</td>
+                                                   
+                                                    <td>
+                                                        @php
+                                                            $images = App\Models\Picture::where('folder_id', $folder->id)->get();
+                                                        @endphp
+                                                        @foreach ($images as $image)
+                                                           <td> {{ $image->path_name }}</td>
+                                                        @endforeach
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
