@@ -300,13 +300,19 @@ class UploadController extends Controller
     
                 // Initialize the image counter from session or cache
                 $imageCounter = session()->get('imageCounter', 1);
-    
+                $lastImg = Picture::where('folder_id', $folderId)->orderby('id', 'desc')->get();
+                $lastID = 1;
+                if(count($lastImg) > 0){
+                    $lastID = (int)substr($lastImg[0]->picture_name,5, strpos($lastImg[0]->picture_name, ".") - 5);
+                    $lastID++;
+                }
+                
                 foreach ($uploadedFiles as $file) {
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = "image$imageCounter.$extension";
+                    $fileName = "image$lastID.$extension";
     
                     // Increment the counter for the next image
-                    $imageCounter++;
+                    $lastID++;
     
                     $file->move($folderPath, $fileName);
                     // http://127.0.0.1:8000/pp/pp1/Left%20Winger/Branch%20of%20Left%20Weigner/image32.jpeg

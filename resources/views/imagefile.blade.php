@@ -245,7 +245,7 @@
                         <div id="scroller" style="overflow: scroll;height:68vh">
                             <div class="row">
                                 <div class="col-12" style="width:100%; ">
-                                    <table class="table table-bordered" id="tbl_exporttable_to_xls">
+                                    <table class="table table-bordered" id="">
                                         <thead>
                                             <tr>
                                                 <th colspan="5">
@@ -348,41 +348,29 @@
                                             <table class="table table-bordered" id="tbl_exporttable_to_xls">
                                                 <thead>
                                                     <tr>
-                                                        {{-- <th>Folder Name</th>
-                                                        @foreach ($picturePaths as $path)
-                                                            <th>Image URL</th>
-                                                        @endforeach --}}
                                                         <tr>
-                                                            <th>Folder Name</th>
-                                                            {{-- @foreach ($images as $image)
-                                                            <th>Image URL</th>
-                                                         @endforeach --}}
-                                                            
+                                                            <th>Internal ID</th>
+                                                            <th>ITEM IMAGE URL 1</th>
+                                                            <th>ITEM IMAGE URL 2</th>
+                                                            <th>ITEM IMAGE URL 3</th>
+                                                            <th>ITEM IMAGE URL 4</th>
+                                                            <th>ITEM IMAGE URL 5</th>
+                                                            <th>ITEM IMAGE URL 6</th>
+                                                            <th>ITEM IMAGE URL 7</th>
+                                                            <th>ITEM IMAGE URL 8</th>
                                                         </tr>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
-                                                    {{-- @foreach ($subfolders as $folder)
-                                                    <tr>
-                                                        <td> {{ $folder->folder_name }} </td>
-                                                        @foreach ($picturePaths as $path)
-                                                            <td>{{ $path }}</td>
-                                                        @endforeach
-                                                    </tr>
-                                                @endforeach --}}
                                                 @foreach ($subfolders as $folder)
                                                 <tr>
                                                     <td>{{ $folder->folder_name }}</td>
-                                                   
-                                                    <td>
                                                         @php
                                                             $images = App\Models\Picture::where('folder_id', $folder->id)->get();
                                                         @endphp
                                                         @foreach ($images as $image)
                                                            <td> {{ $image->path_name }}</td>
-                                                        @endforeach
-                                                    </td>
+                                                        @endforeach          
                                                 </tr>
                                             @endforeach
                                                 </tbody>
