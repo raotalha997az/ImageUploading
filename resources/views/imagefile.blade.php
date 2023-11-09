@@ -344,7 +344,7 @@
                                     </div>
                                     {{-- Folders image table --}}
                                     <div class="row">
-                                        <div class="col-12" style="width:100%; ">
+                                        <div class="col-12" style="width:100%; display:none;">
                                             <table class="table table-bordered" id="tbl_exporttable_to_xls">
                                                 <thead>
                                                     <tr>
