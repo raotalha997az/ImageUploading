@@ -178,6 +178,10 @@
                     vertical-align: middle;
                 }
             }
+
+            .move-right {
+                float: right !important;
+            }
         </style>
 
 
@@ -185,13 +189,12 @@
 
             <div class="container1">
                 <div class="container3">
-
+                    <h1 class="text-center">{{ Auth::user()->name }}</h1>
                     <form action="{{ route('insert.Image') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         {{-- <div class="container"> --}}
                         <div class="container2">
                             <div class="row">
-
                                 <div class="col-lg-6">
                                     @if ($folder->main_folder_id == 0)
                                         <a href="{{ route('folders.show') }}" class="btn-sm m-2  btn btn-primary">Back</a>
@@ -201,26 +204,51 @@
                                     @endif
                                 </div>
                                 <div class="col-lg-6">
-                                    <button type="button" style="width: 200px;margin-left:65%" class="btn"
+                                    {{-- <button type="button" style="width: 200px;margin-left:65%  @if (!$isAdmin) display:none; @endif" class="btn"
                                         id="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         Create
+                                    </button> --}}
+                                    {{-- upload only admin --}}
+                                    <button type="button"
+                                        style="width: 200px; margin-left: 65%; @if (!$isAdmin) display:none; @endif"
+                                        class="btn" id="btn" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop">
+                                        Create
                                     </button>
+
                                 </div>
                             </div>
                             <div class="folder-container1 mb-2 d-flex">
-                                <div class="header d-flex  align-items-center" style="position: absolute;left:20%;"
-                                    style="width: 100%;">
+                                <div class="header d-flex  align-items-center" 
+                                    style="width: 100%; justify-content: flex-end;">
 
                                     <span class="browse-files col-auto" style="margin-left: 30%;">
+                                        {{-- upload only admin --}}
                                         <input type="file" class="form-control col-auto" id="default-file-input"
-                                            name="uploads[]" multiple>
+                                            name="uploads[]" multiple
+                                            style="@if (!$isAdmin) display:none; @endif">
+                                        {{-- <input type="file" class="form-control col-auto" id="default-file-input"
+                                            name="uploads[]" multiple > --}}
                                         <input type="hidden" id="folder_id" value="{{ $folder->id }}" name="folder_id">
                                         <input type="hidden" id="folder_id" value="{{ $folder->folder_name }}"
                                             name="folder_name">
                                     </span>
-                                    <button type="submit" id="btn" class="btn mb-3 btn-md">Submit</button>
-                                    <button class="btn btn-primary col-auto m-2 sm btn-md"
-                                        onclick="ExportToExcel('xlsx')">Export to Excel</button>
+                                    {{-- upload only admin --}}
+                                    <button type="submit" id="btn" class="btn mb-3 btn-md"
+                                        style="@if (!$isAdmin) display:none; @endif">
+                                        Submit
+                                    </button>
+                                    {{-- <button type="submit" id="btn" class="btn mb-3 btn-md" margin-left: 65%; >
+                                    Submit
+                                </button> --}}
+                                    {{-- <button class="btn btn-primary col-auto m-3 btn mb-3 btn-md"
+                                        onclick="ExportToExcel('xlsx')"
+                                        style="@if (!$isAdmin)  @endif">Export to Excel</button> --}}
+                                    <button class="btn btn-primary col-auto m-3 btn mb-3 btn-md move-right"
+                                        onclick="ExportToExcel('xlsx')">
+                                        Export to Excel
+                                    </button>
+
 
                                 </div>
                             </div>
@@ -297,10 +325,13 @@
                                                                 value="{{ $folder->id }}">
                                                             <input type="hidden" name="picture_id"
                                                                 value="{{ $image->id }}">
+                                                            {{-- delete only admin --}}
                                                             <button type="submit" class="btn btn-danger delete-image-btn"
-                                                                type="submit">
+                                                                type="submit"
+                                                                style="@if (!$isAdmin) display:none; @endif">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
+
                                                         </form>
 
                                                     </td>
@@ -407,6 +438,7 @@
                                                         @if ($folderWithMaxImages)
                                                             @php
                                                                 $maxImages = App\Models\Picture::where('folder_id', $folderWithMaxImages->id)->get();
+
                                                             @endphp
                                                             @foreach ($maxImages as $index => $image)
                                                                 <th>ITEM IMAGE URL {{ $index + 1 }}</th>
