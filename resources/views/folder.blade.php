@@ -126,8 +126,8 @@
                     </div>
                 @endif
                 <div class="header d-flex">
-                    <h1 class="text-center">Folders</h1> <br>
-                    <h1 class="text-center">{{ Auth::user()->name }}</h1>
+                    <h1 class="text-center">Folders</h1> 
+                    
 
 
                     {{-- <button type="button" style="width: 200px;margin-left:70%" class="btn" id="btn"
@@ -155,9 +155,7 @@
 
                 <div class="container">
                     <div class="row">
-
-
-
+                        <h1 class="text-center">{{ Auth::user()->name }}</h1>
                         @foreach ($folders as $folder)
                             {{-- @if ($folders->main_folder_id == 0) --}}
                             <div class="col-md-3 mt-5 ">
